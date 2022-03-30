@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minetd:block/pawn",
+      "y": 90
+    },
+
+    "facing=north": {
+      "model": "minetd:block/pawn"
+    },
+
+    "facing=south": {
+      "model": "minetd:block/pawn",
+      "y": 180
+    },
+
+    "facing=west": {
+      "model": "minetd:block/pawn",
+      "y": 270
+    }
+  }
+}

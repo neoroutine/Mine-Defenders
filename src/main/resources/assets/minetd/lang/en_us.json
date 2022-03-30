@@ -1,0 +1,9 @@
+{
+  "block.minetd.tower_base": "Tower base",
+  "block.minetd.minigenerator": "MiniGenerator",
+  "block.minetd.pawn": "Pawn",
+  "block.minetd.rook": "Rook",
+  "block.minetd.artificial_veins": "Artificial veins",
+  "item.minetd.tower_base_fragment": "Tower base fragment",
+  "itemGroup.MineTD": "Mine Defenders"
+}

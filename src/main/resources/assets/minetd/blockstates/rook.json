@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minetd:block/rook",
+      "y": 90
+    },
+
+    "facing=north": {
+      "model": "minetd:block/rook"
+    },
+
+    "facing=south": {
+      "model": "minetd:block/rook",
+      "y": 180
+    },
+
+    "facing=west": {
+      "model": "minetd:block/rook",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/redstone_dust_dot",
+  "textures": {
+    "layer0": "minetd:block/artificial_veins"
+  }
+}

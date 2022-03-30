@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "minetd:block/pawn",
+    "front": "minetd:block/pawn_front",
+    "side": "minetd:block/pawn"
+  }
+}

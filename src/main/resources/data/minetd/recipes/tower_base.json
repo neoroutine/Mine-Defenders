@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "xgx",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "minetd:tower_base_fragment"
+    },
+    "g":
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:tower_base",
+    "count": 1
+  }
+}

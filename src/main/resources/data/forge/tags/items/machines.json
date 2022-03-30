@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minetd:tower_base",
+    "minetd:tower_base_fragment",
+    "minetd:minigenerator",
+    "minetd:pawn",
+    "minetd:rook"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "multipart":
+  [
+    {
+      "apply":
+      {
+        "model":"minetd:block/minigenerator"
+      }
+    },
+    {
+      "when":
+      {
+        "powered": "false"
+      },
+      "apply":
+      {
+        "model": "minetd:block/minigenerator"
+      }
+    },
+    {
+      "when":
+      {
+        "powered": "true"
+      },
+      "apply":
+      {
+        "model": "minetd:block/minigenerator_powered"
+      }
+    }
+  ]
+}

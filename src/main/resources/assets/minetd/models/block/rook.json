@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "minetd:block/rook",
+    "front": "minetd:block/rook_front",
+    "side": "minetd:block/rook"
+  }
+}

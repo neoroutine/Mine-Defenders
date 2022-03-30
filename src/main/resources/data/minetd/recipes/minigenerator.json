@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "rrr",
+    "iti",
+    "ggg"
+  ],
+  "key":
+  {
+    "r":
+    {
+      "item": "minecraft:redstone"
+    },
+    "i":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "t":
+    {
+      "item": "minetd:tower_base"
+    },
+    "g":
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:minigenerator",
+    "count": 1
+  }
+}
