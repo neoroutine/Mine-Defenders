@@ -1,5 +1,7 @@
 package neoroutine.minetd.common.blocks.generators.minigenerator;
 
+import neoroutine.minetd.common.blocks.generators.GeneratorBlock;
+import neoroutine.minetd.common.blocks.generators.GeneratorBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -34,19 +36,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class MiniGenerator extends Block implements EntityBlock
+public class MiniGenerator extends GeneratorBlock
 {
-    private static final String MESSAGE_MINIGENERATOR = "Tiny power generation\nsufficient for basic towers (%d FE/s)";
-    private static final String SCREEN_MINETD_MINIGENERATOR  = "screen.minetd.minigenerator";
-    private static final VoxelShape RENDER_SHAPE = Shapes.box(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
-
     public MiniGenerator()
     {
-        super(Properties.of(Material.METAL)
-                .sound(SoundType.METAL)
-                .strength(2.0f)
-                .lightLevel(state->state.getValue(BlockStateProperties.POWERED) ? 14 : 0)
-                .requiresCorrectToolForDrops());
+        super();
+
+        setBlockMessage("T1 generator");
+        setScreenMessage("T1 generator");
     }
 
     @Nullable
@@ -55,60 +52,20 @@ public class MiniGenerator extends Block implements EntityBlock
         return new MiniGeneratorBE(position, state);
     }
 
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
-    {
-        if (level.isClientSide()) { return null;}
-
-        return (lvl, pos, blockState, t) -> {
-            if (t instanceof MiniGeneratorBE tile) {
-                tile.tickServer();
-            }
-        };
-    }
-
-    @Override
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter reader, BlockPos position)
-    {
-        return RENDER_SHAPE;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter reader, List<Component> components, TooltipFlag flags)
-    {
-        components.add(new TranslatableComponent(MESSAGE_MINIGENERATOR, Integer.toString(MiniGeneratorBE.energyProperties.getPowerGeneration()))
-                       .withStyle(ChatFormatting.BLUE));
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
-        super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.POWERED);
-    }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return super.getStateForPlacement(context).setValue(BlockStateProperties.POWERED, false);
-    }
-
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos position, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!level.isClientSide())
         {
             BlockEntity currentBE = level.getBlockEntity(position);
 
-            if (currentBE instanceof MiniGeneratorBE)
+            if (currentBE instanceof GeneratorBlockEntity)
             {
                 MenuProvider containerProvider = new MenuProvider()
                 {
                     @Override
                     public Component getDisplayName()
                     {
-                        return new TranslatableComponent(SCREEN_MINETD_MINIGENERATOR);
+                        return new TranslatableComponent(getScreenMessage());
                     }
 
                     @Nullable

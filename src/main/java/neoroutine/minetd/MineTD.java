@@ -18,6 +18,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 //TODO:Create a template for json blockstates (tower template)
 //TODO:Recipes
 //TODO:Javadoc
+//TODO:Take a stance on this. or juste accessing the variable
 @Mod("minetd")
 public class MineTD
 {

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import neoroutine.minetd.MineTD;
+import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
 import neoroutine.minetd.common.blocks.towers.pawn.Pawn;
 import neoroutine.minetd.common.blocks.towers.pawn.PawnBE;
 import neoroutine.minetd.common.items.TowerAnalyzer;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -92,7 +94,7 @@ public class Handlers
         if (targetedBlockEntity != null)
         {
             //Later will be instanceof Tower tower
-            if (targetedBlockEntity instanceof PawnBE tower)
+            if (targetedBlockEntity instanceof TowerBlockEntity tower)
             {
                 r = 0;
                 g = 255;
@@ -107,7 +109,7 @@ public class Handlers
                 float offsetZ = 0f;
 
                 //X gives your distance east of the origin, and Z gives the distance south
-                Direction facing = tower.getBlockState().getValue(Pawn.FACING);
+                Direction facing = tower.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
                 switch(facing)
                 {
                     case NORTH:

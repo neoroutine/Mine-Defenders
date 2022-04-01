@@ -10,14 +10,18 @@ import neoroutine.minetd.common.blocks.towerbase.TowerBaseContainer;
 import neoroutine.minetd.common.blocks.towers.pawn.Pawn;
 import neoroutine.minetd.common.blocks.towers.pawn.PawnBE;
 import neoroutine.minetd.common.blocks.towers.pawn.PawnContainer;
-import neoroutine.minetd.common.blocks.towers.pawn.RookBE;
 import neoroutine.minetd.common.blocks.towers.rook.Rook;
+import neoroutine.minetd.common.blocks.towers.rook.RookBE;
 import neoroutine.minetd.common.blocks.towers.rook.RookContainer;
 import neoroutine.minetd.common.items.TowerAnalyzer;
+import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.AbstractChestBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -87,9 +91,8 @@ public class Registration
     //PAWN (BECS)
     public static final RegistryObject<Pawn> PAWN = registerBlock("pawn", Pawn::new);
     public static final RegistryObject<Item> PAWN_ITEM = registerItem(PAWN);
-    public static final RegistryObject<BlockEntityType<PawnBE>> PAWN_BE = registerBlockEntity("pawn",
-                                                                                                     PawnBE::new,
-            PAWN);
+    public static final RegistryObject<BlockEntityType<PawnBE>> PAWN_BE = registerBlockEntity("pawn", PawnBE::new, PAWN);
+
     public static final Supplier<MenuType<PawnContainer>> PAWN_CONTAINER_SUPPLIER = () ->
             IForgeMenuType.create((windowId, inv, data) -> new PawnContainer(windowId, data.readBlockPos(), inv, inv.player));
     public static final RegistryObject<MenuType<PawnContainer>> PAWN_CONTAINER = registerContainer("pawn", PAWN_CONTAINER_SUPPLIER);
@@ -97,9 +100,7 @@ public class Registration
     //ROOK (BECS)
     public static final RegistryObject<Rook> ROOK = registerBlock("rook", Rook::new);
     public static final RegistryObject<Item> ROOK_ITEM = registerItem(ROOK);
-    public static final RegistryObject<BlockEntityType<RookBE>> ROOK_BE = registerBlockEntity("rook",
-            RookBE::new,
-            ROOK);
+    public static final RegistryObject<BlockEntityType<RookBE>> ROOK_BE = registerBlockEntity("rook", RookBE::new, ROOK);
     public static final Supplier<MenuType<RookContainer>> ROOK_CONTAINER_SUPPLIER = () ->
             IForgeMenuType.create((windowId, inv, data) -> new RookContainer(windowId, data.readBlockPos(), inv, inv.player));
     public static final RegistryObject<MenuType<RookContainer>> ROOK_CONTAINER = registerContainer("rook", ROOK_CONTAINER_SUPPLIER);
@@ -119,7 +120,10 @@ public class Registration
         CONTAINER_REGISTER.register(bus);
     }
 
+
     //Helper methods
+
+
     public static RegistryObject<Block> registerBlock(String name)
     {
         return BLOCK_REGISTER.register(name, () -> new Block(BLOCK_PROPERTIES));

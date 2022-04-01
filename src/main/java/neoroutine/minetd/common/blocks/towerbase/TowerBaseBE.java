@@ -1,5 +1,6 @@
 package neoroutine.minetd.common.blocks.towerbase;
 
+import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
 import neoroutine.minetd.common.blocks.towers.pawn.PawnBE;
 import neoroutine.minetd.common.capabilities.CapabilityEnergyProperties;
 import neoroutine.minetd.common.energy.BaseEnergyProperties;
@@ -67,7 +68,7 @@ public class TowerBaseBE extends BlockEntity
                 {
                     boolean doAgain = neighbourBE.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite()).map(handler ->
                     {
-                        if (handler.canReceive() && neighbourBE instanceof PawnBE)
+                        if (handler.canReceive() && neighbourBE instanceof TowerBlockEntity)
                         {
                             int simulatedMaxEnergyReceived = handler.receiveEnergy(Integer.MAX_VALUE, true);
                             int energyReceived = handler.receiveEnergy(Math.min(storedEnergy.get(), simulatedMaxEnergyReceived), false);
