@@ -1,6 +1,8 @@
-<img src="images/logo_upscaled.png" width="300" height="300">
+
 
 # ⛏️`Mine Defenders`♟️
+
+<img src="images/logo_upscaled.png" width="300" height="300">
 
 ## Tower Defense in Minecraft !
 
