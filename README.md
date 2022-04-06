@@ -50,8 +50,10 @@ All the chess pieces have their own set of moves, the towers follow this princip
 - Javadoc ⚠️
 - Higher tier towers and generators ⚠️
 - 3D Rendering of reach boxes for all towers ⚠️
+- Point based reward system ⚠️
 - Player involved combat (Magic staff akin to Dungeon Defenders') ❌
-- Point based reward system ❌
+- New monsters to fight ❌
+- King to protect (Crystal or core in td games) ❌
 
 
 ### Heavily inspired by the original [Dungeon Defenders'](https://en.wikipedia.org/wiki/Dungeon_Defenders) [The King's Game ](https://dungeondefenders.fandom.com/wiki/The_King%27s_Game)map
