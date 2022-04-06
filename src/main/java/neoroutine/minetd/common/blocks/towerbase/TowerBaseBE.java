@@ -43,6 +43,13 @@ public class TowerBaseBE extends BlockEntity
         super(Registration.TOWER_BASE_BE.get(), position, state);
     }
 
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        energyPropertiesHandler.invalidate();
+        energyHandler.invalidate();
+    }
+
     public void tickServer()
     {
         BlockState blockState = level.getBlockState(worldPosition);

@@ -101,6 +101,7 @@ public class Registration
     public static final RegistryObject<Rook> ROOK = registerBlock("rook", Rook::new);
     public static final RegistryObject<Item> ROOK_ITEM = registerItem(ROOK);
     public static final RegistryObject<BlockEntityType<RookBE>> ROOK_BE = registerBlockEntity("rook", RookBE::new, ROOK);
+
     public static final Supplier<MenuType<RookContainer>> ROOK_CONTAINER_SUPPLIER = () ->
             IForgeMenuType.create((windowId, inv, data) -> new RookContainer(windowId, data.readBlockPos(), inv, inv.player));
     public static final RegistryObject<MenuType<RookContainer>> ROOK_CONTAINER = registerContainer("rook", ROOK_CONTAINER_SUPPLIER);

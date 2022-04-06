@@ -1,14 +1,19 @@
 package neoroutine.minetd.common.blocks.towers;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
@@ -25,6 +30,8 @@ public class TowerBlock extends Block implements EntityBlock
 {
     private String BLOCK_MESSAGE   = "message.tower";
     private String SCREEN_MESSAGE  = "screen.minetd.tower";
+    protected String towerName = "Tower";
+
     public static final DirectionProperty FACING_PROPERTY = HorizontalDirectionalBlock.FACING;
 
     public static final VoxelShape RENDER_SHAPE = Shapes.box(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
@@ -45,6 +52,9 @@ public class TowerBlock extends Block implements EntityBlock
     public String getScreenMessage() { return this.SCREEN_MESSAGE; }
     protected void setScreenMessage(String value){ this.SCREEN_MESSAGE = value;}
 
+    public String getTowerName() { return this.towerName; }
+    protected void setTowerName(String value){ this.towerName = value;}
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
@@ -57,10 +67,24 @@ public class TowerBlock extends Block implements EntityBlock
         return RENDER_SHAPE;
     }
 
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        if (level.isClientSide()) { return null;}
+
+        return (lvl, pos, blockState, t) ->
+        {
+            if (t instanceof TowerBlockEntity tile)
+            {
+                tile.tickServer();
+            }
+        };
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter reader, List<Component> components, TooltipFlag flags)
     {
-        components.add(new TranslatableComponent(getBlockMessage()));
+        components.add(new TranslatableComponent(getBlockMessage()).withStyle(ChatFormatting.BLUE));
     }
 
     @Override
@@ -74,7 +98,7 @@ public class TowerBlock extends Block implements EntityBlock
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return this.defaultBlockState().setValue(FACING_PROPERTY, context.getHorizontalDirection());
+        return this.defaultBlockState().setValue(FACING_PROPERTY, context.getHorizontalDirection().getOpposite());
     }
 
     @Override

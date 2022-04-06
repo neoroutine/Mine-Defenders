@@ -57,6 +57,15 @@ public class GeneratorBlockEntity extends BlockEntity
         super(be, position, state);
     }
 
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        energyPropertiesHandler.invalidate();
+        itemHandler.invalidate();
+        energyHandler.invalidate();
+        burningCounterHandler.invalidate();
+    }
+
     public void tickServer()
     {
         BlockState blockState = level.getBlockState(worldPosition);
@@ -152,61 +161,27 @@ public class GeneratorBlockEntity extends BlockEntity
     @Override
     public void saveAdditional(CompoundTag tag)
     {
+        super.saveAdditional(tag);
         saveClientData(tag);
         tag.put("Inventory", itemStackHandler.serializeNBT());
         tag.put("Energy", energyStorage.serializeNBT());
         tag.put("Info", burningItem.serializeNBT());
     }
 
+
     private void saveClientData(CompoundTag tag)
     {
-        CompoundTag burningTag = new CompoundTag();
-        burningTag.putInt("Counter", burningItem.getBurningCounter());
-        burningTag.putString("Item", burningItem.getBurningItemName());
-        tag.put("Burning", burningTag);
+        tag.put("Burning", burningItem.serializeNBT());
     }
 
     private void loadClientData(CompoundTag tag)
     {
         if (tag.contains("Burning"))
         {
-            CompoundTag burningTag = tag.getCompound("Burning");
-            burningItem.setBurningCounter(burningTag.getInt("Counter"));
-            String itemName = burningTag.getString("Item");
-            if (itemName.equals("None")) { burningItem.setBurningItem(null);}
-            else
-            {
-                burningItem.setBurningItem(ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft", itemName)));
-            }
+            burningItem.deserializeNBT(tag.getCompound("Burning"));
         }
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side)
-    {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-        {
-            return itemHandler.cast();
-        }
-
-        if (capability == CapabilityEnergy.ENERGY)
-        {
-            return energyHandler.cast();
-        }
-
-        if (capability == CapabilityBurningItem.BURNING_ITEM_CAPABILITY)
-        {
-            return burningCounterHandler.cast();
-        }
-
-        if (capability == CapabilityEnergyProperties.ENERGY_PROPERTIES_CAPABILITY)
-        {
-            return energyPropertiesHandler.cast();
-        }
-
-        return super.getCapability(capability, side);
-    }
 
     @Nullable
     @Override
@@ -298,5 +273,32 @@ public class GeneratorBlockEntity extends BlockEntity
                 setChanged();
             }
         };
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side)
+    {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        {
+            return itemHandler.cast();
+        }
+
+        if (capability == CapabilityEnergy.ENERGY)
+        {
+            return energyHandler.cast();
+        }
+
+        if (capability == CapabilityBurningItem.BURNING_ITEM_CAPABILITY)
+        {
+            return burningCounterHandler.cast();
+        }
+
+        if (capability == CapabilityEnergyProperties.ENERGY_PROPERTIES_CAPABILITY)
+        {
+            return energyPropertiesHandler.cast();
+        }
+
+        return super.getCapability(capability, side);
     }
 }

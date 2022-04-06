@@ -1,6 +1,8 @@
 package neoroutine.minetd;
 
+import neoroutine.minetd.client.MenuScreenManager;
 import neoroutine.minetd.client.Rendering;
+import neoroutine.minetd.common.grandmaster.SimpleNetworkHandler;
 import neoroutine.minetd.common.setup.Registration;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -8,6 +10,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 //TODO:Chess theme (dungeon defenders king's game inspired)
@@ -19,6 +22,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 //TODO:Recipes
 //TODO:Javadoc
 //TODO:Take a stance on this. or juste accessing the variable
+//TODO:Reduce life when placing tower to avoid spamming ?
 @Mod("minetd")
 public class MineTD
 {
@@ -36,7 +40,14 @@ public class MineTD
         Registration.register();
 
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> bus.addListener(Rendering::register));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> bus.addListener(MenuScreenManager::register));
+        bus.addListener(this::setup);
     }
+
+    public void setup(final FMLCommonSetupEvent event)
+    {
+        event.enqueueWork(SimpleNetworkHandler::init);
+    }
+
 
 }

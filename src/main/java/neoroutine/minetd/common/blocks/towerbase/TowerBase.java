@@ -38,7 +38,7 @@ import java.util.List;
 public class TowerBase extends Block implements EntityBlock
 {
 
-    private static final String MESSAGE_TOWER_BASE        = "Tiny power storage\nsufficient for T1 towers (%d total FE";
+    private static final String MESSAGE_TOWER_BASE        = "Tiny power storage\nsufficient for T1 towers";
     private static final String SCREEN_MINETD_TOWER_BASE  = "screen.minetd.tower_base";
 
     private static final VoxelShape RENDER_SHAPE = Shapes.box(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
@@ -83,8 +83,7 @@ public class TowerBase extends Block implements EntityBlock
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter reader, List<Component> components, TooltipFlag flags)
     {
-        components.add(new TranslatableComponent(MESSAGE_TOWER_BASE, Integer.toString(TowerBaseBE.energyProperties.getMaxPowerCapacity()))
-                .withStyle(ChatFormatting.BLUE));
+        components.add(new TranslatableComponent(MESSAGE_TOWER_BASE).withStyle(ChatFormatting.BLUE));
     }
 
     @Override

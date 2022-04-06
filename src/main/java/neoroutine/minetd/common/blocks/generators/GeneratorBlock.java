@@ -76,7 +76,7 @@ public class GeneratorBlock extends Block implements EntityBlock
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter reader, List<Component> components, TooltipFlag flags)
     {
-        components.add(new TranslatableComponent(BLOCK_MESSAGE));
+        components.add(new TranslatableComponent(BLOCK_MESSAGE).withStyle(ChatFormatting.BLUE));
     }
 
     @Override

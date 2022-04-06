@@ -1,6 +1,7 @@
 package neoroutine.minetd.common.blocks.towers.rook;
 
 import neoroutine.minetd.common.blocks.towers.TowerBlock;
+import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -29,6 +30,7 @@ public class Rook extends TowerBlock
 
         setBlockMessage("T2 Tower");
         setScreenMessage("T2 Tower");
+        setTowerName("Rook");
     }
 
     @Nullable
@@ -39,27 +41,14 @@ public class Rook extends TowerBlock
     }
 
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
-    {
-        if (level.isClientSide()) { return null;}
-
-        return (lvl, pos, blockState, t) ->
-        {
-            if (t instanceof RookBE tile) {
-                tile.tickServer();
-            }
-        };
-    }
-
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos position, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!level.isClientSide())
         {
             BlockEntity currentBE = level.getBlockEntity(position);
+            System.out.println("currentBE = " + currentBE.toString());
 
-            if (currentBE instanceof RookBE)
+            if (currentBE instanceof TowerBlockEntity)
             {
                 MenuProvider containerProvider = new MenuProvider()
                 {

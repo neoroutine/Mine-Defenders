@@ -1,32 +1,50 @@
 package neoroutine.minetd.common.blocks.towers;
 
+import neoroutine.minetd.common.blocks.generators.GeneratorBlockEntity;
 import neoroutine.minetd.common.capabilities.CapabilityEnergyProperties;
+import neoroutine.minetd.common.capabilities.CapabilityGrandmaster;
 import neoroutine.minetd.common.energy.BaseEnergyProperties;
 import neoroutine.minetd.common.energy.BaseEnergyStorage;
+import neoroutine.minetd.common.grandmaster.EloRatingProvider;
+import neoroutine.minetd.common.grandmaster.Grandmaster;
 import neoroutine.minetd.common.setup.Registration;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class TowerBlockEntity extends BlockEntity
 {
@@ -37,6 +55,9 @@ public class TowerBlockEntity extends BlockEntity
     private final BaseEnergyStorage energyStorage = createEnergyStorage();
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energyStorage);
 
+    public final Grandmaster grandmaster = createGrandmaster();
+    private final LazyOptional<Grandmaster> grandmasterHandler = LazyOptional.of(() -> grandmaster);
+
     public final TowerProperties towerProperties = new TowerProperties(TowerDelay.PAWN, TowerReach.PAWN, TowerDamage.PAWN, TowerConsumption.PAWN);
     private int counter = 0;
 
@@ -46,7 +67,14 @@ public class TowerBlockEntity extends BlockEntity
     public TowerBlockEntity(BlockEntityType<?> be, BlockPos position, BlockState state)
     {
         super(be, position, state);
+    }
 
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        energyPropertiesHandler.invalidate();
+        energyHandler.invalidate();
+        grandmasterHandler.invalidate();
     }
 
     public BlockPos relativeCounter(BlockPos pos, Direction facing, int count)
@@ -59,18 +87,25 @@ public class TowerBlockEntity extends BlockEntity
     //TODO: Later cache entity list somewhere to avoid fetching for it every time
     public void tickServer()
     {
+
         Runnable task = () ->
         {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            grandmaster.updatePlayer(this.level);
+
             entities = level.getEntitiesOfClass(Entity.class, reachBox);
             boolean attacked = attackRandomEnemy();
             if (attacked) energyStorage.consumeEnergy(towerProperties.getConsumption());
+
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            setChanged();
         };
 
 
         delayedPredicate(task);
-
-        setChanged();
     }
+
+
 
     private void delayedPredicate(Runnable task)
     {
@@ -81,6 +116,14 @@ public class TowerBlockEntity extends BlockEntity
         }
 
         counter++;
+    }
+
+    public void updatePlacer(Player player)
+    {
+        this.grandmaster.setPlayer(player);
+        this.grandmaster.updatePlayer(this.level);
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+        setChanged();
     }
 
     private boolean enemyAvailable()
@@ -117,7 +160,20 @@ public class TowerBlockEntity extends BlockEntity
             randomHostile = entities.get(randomHostileIndex);
         }
 
+        String randomHostileName = randomHostile.getScoreboardName();
         randomHostile.hurt(DamageSource.MAGIC, towerProperties.getDamage());
+
+        if (!randomHostile.isAlive())
+        {
+            this.grandmaster.updatePlayer(this.level);
+            this.grandmaster.getPlayer().getCapability(EloRatingProvider.PLAYER_ELO_POINTS).ifPresent(capability ->
+            {
+                capability.addPoints(this.grandmaster.getPlayer(), 5);
+                int points = capability.getPoints();
+                String message = String.format("Your tower killed an enemy. Points +%d (%d)", 5, points);
+                this.grandmaster.getPlayer().displayClientMessage(new TranslatableComponent(message), true);
+            });
+        }
 
         return true;
     }
@@ -129,6 +185,11 @@ public class TowerBlockEntity extends BlockEntity
     {
         super.load(tag);
         loadClientData(tag);
+        if (tag.contains("Grandmaster"))
+        {
+            grandmaster.deserializeNBT(tag.getCompound("Grandmaster"));
+            grandmaster.updatePlayer(this.level);
+        }
     }
 
     @Override
@@ -136,11 +197,29 @@ public class TowerBlockEntity extends BlockEntity
     {
         super.saveAdditional(tag);
         saveClientData(tag);
+        grandmaster.updatePlayer(this.level);
+        tag.put("Grandmaster", grandmaster.serializeNBT());
+    }
+
+    private void saveClientData(CompoundTag tag)
+    {
+        grandmaster.updatePlayer(this.level);
+        tag.put("GrandmasterClient", grandmaster.serializeNBT());
+    }
+
+    private void loadClientData(CompoundTag tag)
+    {
+        if (tag.contains("GrandmasterClient"))
+        {
+            grandmaster.deserializeNBT(tag.getCompound("GrandmasterClient"));
+            grandmaster.updatePlayer(this.level);
+        }
     }
 
     @Nullable
     @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+    public ClientboundBlockEntityDataPacket getUpdatePacket()
+    {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
@@ -174,9 +253,6 @@ public class TowerBlockEntity extends BlockEntity
         }
     }
 
-    private void saveClientData(CompoundTag tag) {}
-
-    private void loadClientData(CompoundTag tag) {}
 
     @Nonnull
     @Override
@@ -192,6 +268,11 @@ public class TowerBlockEntity extends BlockEntity
             return energyPropertiesHandler.cast();
         }
 
+        if (capability == CapabilityGrandmaster.GRANDMASTER_CAPABILITY)
+        {
+            return grandmasterHandler.cast();
+        }
+
         return super.getCapability(capability, side);
     }
 
@@ -204,6 +285,15 @@ public class TowerBlockEntity extends BlockEntity
             {
                 setChanged();
             }
+        };
+    }
+
+    private Grandmaster createGrandmaster()
+    {
+        return new Grandmaster()
+        {
+            @Override
+            protected void onUpdate() { setChanged();}
         };
     }
 

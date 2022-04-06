@@ -1,6 +1,7 @@
 package neoroutine.minetd.common.blocks.towers.pawn;
 
 import neoroutine.minetd.common.blocks.towers.TowerBlock;
+import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -30,6 +31,7 @@ public class Pawn extends TowerBlock
 
         setBlockMessage("T1 Tower");
         setScreenMessage("T1 Tower");
+        setTowerName("Pawn");
     }
 
     @Nullable
@@ -40,27 +42,13 @@ public class Pawn extends TowerBlock
     }
 
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
-    {
-        if (level.isClientSide()) { return null;}
-
-        return (lvl, pos, blockState, t) ->
-        {
-            if (t instanceof PawnBE tile) {
-                tile.tickServer();
-            }
-        };
-    }
-
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos position, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!level.isClientSide())
         {
             BlockEntity currentBE = level.getBlockEntity(position);
 
-            if (currentBE instanceof PawnBE)
+            if (currentBE instanceof TowerBlockEntity)
             {
                 MenuProvider containerProvider = new MenuProvider()
                 {

@@ -18,8 +18,8 @@
               "source": "block_entity",
               "ops": [
                 {
-                  "source": "Energy",
-                  "target": "BlockEntityTag.Energy",
+                  "source": "Grandmaster",
+                  "target": "BlockEntityTag.Grandmaster",
                   "op": "replace"
                 }
               ]

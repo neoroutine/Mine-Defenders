@@ -2,8 +2,10 @@ package neoroutine.minetd.common.blocks.towers.pawn;
 
 import neoroutine.minetd.common.blocks.container.BaseContainer;
 import neoroutine.minetd.common.capabilities.CapabilityEnergyProperties;
+import neoroutine.minetd.common.capabilities.CapabilityGrandmaster;
 import neoroutine.minetd.common.energy.BaseEnergyProperties;
 import neoroutine.minetd.common.energy.BaseEnergyStorage;
+import neoroutine.minetd.common.grandmaster.Grandmaster;
 import neoroutine.minetd.common.setup.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -70,6 +72,16 @@ public class PawnContainer extends BaseContainer
     public int getMaxPowerCapacity()
     {
         return blockEntity.getCapability(CapabilityEnergyProperties.ENERGY_PROPERTIES_CAPABILITY).map(BaseEnergyProperties::getMaxPowerCapacity).orElse(0);
+    }
+
+    public String getGrandmasterName()
+    {
+        return blockEntity.getCapability(CapabilityGrandmaster.GRANDMASTER_CAPABILITY).map(Grandmaster::getGrandmasterName).orElse("Unknown");
+    }
+
+    public String getGrandmasterUUID()
+    {
+        return blockEntity.getCapability(CapabilityGrandmaster.GRANDMASTER_CAPABILITY).map(Grandmaster::getGrandMasterUUID).orElse("Unknown");
     }
 
 }
