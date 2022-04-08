@@ -1,6 +1,9 @@
 package neoroutine.minetd.common.setup;
 
 import neoroutine.minetd.MineTD;
+import neoroutine.minetd.common.blocks.blockentity.king.KingBlock;
+import neoroutine.minetd.common.blocks.blockentity.king.KingBlockEntity;
+import neoroutine.minetd.common.blocks.blockentity.king.KingContainer;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGenerator;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorBE;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorContainer;
@@ -105,6 +108,15 @@ public class Registration
     public static final Supplier<MenuType<RookContainer>> ROOK_CONTAINER_SUPPLIER = () ->
             IForgeMenuType.create((windowId, inv, data) -> new RookContainer(windowId, data.readBlockPos(), inv, inv.player));
     public static final RegistryObject<MenuType<RookContainer>> ROOK_CONTAINER = registerContainer("rook", ROOK_CONTAINER_SUPPLIER);
+
+    //KING (BECS)
+    public static final RegistryObject<KingBlock> KING = registerBlock("king", KingBlock::new);
+    public static final RegistryObject<Item> KING_ITEM = registerItem(KING);
+    public static final RegistryObject<BlockEntityType<KingBlockEntity>> KING_BE = registerBlockEntity("king", KingBlockEntity::new, KING);
+
+    public static final Supplier<MenuType<KingContainer>> KING_CONTAINER_SUPPLIER = () ->
+            IForgeMenuType.create((windowId, inv, data) -> new KingContainer(windowId, data.readBlockPos(), inv, inv.player));
+    public static final RegistryObject<MenuType<KingContainer>> KING_CONTAINER = registerContainer("king", KING_CONTAINER_SUPPLIER);
 
     //TODO:Implement artificial veins later on in chess theme ??
     //public static final RegistryObject<Block> ARTIFICIAL_VEINS     = registerBlock("artificial_veins");

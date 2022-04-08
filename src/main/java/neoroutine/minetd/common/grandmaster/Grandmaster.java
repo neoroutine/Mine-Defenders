@@ -46,6 +46,7 @@ public class Grandmaster implements INBTSerializable<Tag>
 
         if (this.player != null)
         {
+            //setPlayer(this.player); ?
             this.uuid = this.player.getStringUUID();
             return true;
         }
@@ -53,12 +54,11 @@ public class Grandmaster implements INBTSerializable<Tag>
         {
             if (this.uuid.equals("Unknown")) { return false;}
         }
-        
+
         Player player = level.getServer().getPlayerList().getPlayer(UUID.fromString(uuid));
         if (player == null) { return false;}
         setPlayer(player);
         updatePlayer(level);
-        //}
 
         return true;
     }

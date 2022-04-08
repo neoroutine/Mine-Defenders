@@ -3,7 +3,8 @@
   "block.minetd.minigenerator": "MiniGenerator",
   "block.minetd.pawn": "Pawn",
   "block.minetd.rook": "Rook",
-  "block.minetd.artificial_veins": "Artificial veins",
+  "block.minetd.king": "King",
+  "item.minetd.tower_analyzer": "Tower Analyzer",
   "item.minetd.tower_base_fragment": "Tower base fragment",
   "itemGroup.MineTD": "Mine Defenders"
 }

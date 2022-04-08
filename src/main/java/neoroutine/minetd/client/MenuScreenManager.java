@@ -1,6 +1,7 @@
 package neoroutine.minetd.client;
 
 import neoroutine.minetd.MineTD;
+import neoroutine.minetd.common.blocks.blockentity.king.KingScreen;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorScreen;
 import neoroutine.minetd.common.blocks.towerbase.TowerBaseScreen;
 import neoroutine.minetd.common.blocks.towers.pawn.PawnScreen;
@@ -31,6 +32,9 @@ public class MenuScreenManager
 
             MenuScreens.register(Registration.ROOK_CONTAINER.get(), RookScreen::new);
             ItemBlockRenderTypes.setRenderLayer(Registration.ROOK.get(), RenderType.translucent());
+
+            MenuScreens.register(Registration.KING_CONTAINER.get(), KingScreen::new);
+            ItemBlockRenderTypes.setRenderLayer(Registration.KING.get(), RenderType.translucent());
         });
     }
 }

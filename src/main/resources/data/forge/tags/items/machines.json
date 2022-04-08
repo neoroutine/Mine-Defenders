@@ -5,6 +5,7 @@
     "minetd:tower_base_fragment",
     "minetd:minigenerator",
     "minetd:pawn",
-    "minetd:rook"
+    "minetd:rook",
+    "minetd:king"
   ]
 }
