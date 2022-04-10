@@ -1,5 +1,7 @@
 package neoroutine.minetd.common.grandmaster;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -32,13 +34,14 @@ public class Grandmaster implements INBTSerializable<Tag>
         return player;
     }
 
-    public void setPlayer(Player value)
+    public void setPlayer(Player player)
     {
-        if (value == null) {return;}
-        this.player = value;
+        if (player == null) {return;}
+        this.player = player;
         this.uuid   = this.player.getStringUUID();
         onUpdate();
     }
+
 
     public boolean updatePlayer(Level level)
     {
@@ -55,7 +58,7 @@ public class Grandmaster implements INBTSerializable<Tag>
             if (this.uuid.equals("Unknown")) { return false;}
         }
 
-        Player player = level.getServer().getPlayerList().getPlayer(UUID.fromString(uuid));
+        Player player = level.getPlayerByUUID(UUID.fromString(uuid));
         if (player == null) { return false;}
         setPlayer(player);
         updatePlayer(level);
