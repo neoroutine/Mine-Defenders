@@ -41,6 +41,15 @@ All the chess pieces have their own set of moves, the towers follow this princip
 </div>
 
 
+## Enemies
+You'll have to defend yourself and your king from numerous enemies including fast moving ones, teleporting ones and much more, all aiming for the king !
+<div id="illustrations">
+<img src="images/antiking.png" width="400" >
+
+
+<p>An antiking</p>
+</div>
+
 ## As a whole
 - The rightmost block is the **generator** (Minigenerator here, smallest generator available). Burning classic fuel items to generate power.
 
@@ -64,8 +73,8 @@ All the chess pieces have their own set of moves, the towers follow this princip
 - Higher tier towers and generators ⚠️
 - Point based reward system ⚠️
 - King to protect (Crystal or core in td games) ⚠️
+- New monsters to fight ⚠️
 - Player involved combat (Magic staff akin to Dungeon Defenders') ❌
-- New monsters to fight ❌
 
 
 

@@ -16,8 +16,13 @@ import neoroutine.minetd.common.blocks.towers.pawn.PawnContainer;
 import neoroutine.minetd.common.blocks.towers.rook.Rook;
 import neoroutine.minetd.common.blocks.towers.rook.RookBE;
 import neoroutine.minetd.common.blocks.towers.rook.RookContainer;
+import neoroutine.minetd.common.entities.antiking.AntikingEntity;
 import neoroutine.minetd.common.items.TowerAnalyzer;
 import net.minecraft.core.Registry;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
@@ -29,6 +34,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -42,9 +48,13 @@ public class Registration
 {
     //Registries
     public static final DeferredRegister<Block> BLOCK_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, MineTD.MODID);
+
     public static final DeferredRegister<Item> ITEM_REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, MineTD.MODID);
+
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MineTD.MODID);
     public static final DeferredRegister<MenuType<?>> CONTAINER_REGISTER = DeferredRegister.create(ForgeRegistries.CONTAINERS, MineTD.MODID);
+
+    public static final DeferredRegister<EntityType<?>> ENTITY_REGISTER = DeferredRegister.create(ForgeRegistries.ENTITIES, MineTD.MODID);
 
     //Creative mod tab
     public static final String TAB_NAME = "MineTD";
@@ -122,6 +132,10 @@ public class Registration
     //public static final RegistryObject<Block> ARTIFICIAL_VEINS     = registerBlock("artificial_veins");
     //public static final RegistryObject<Item> ARTIFICIAL_VEINS_ITEM = registerItem(ARTIFICIAL_VEINS);
 
+    //ANTIKING (ENTITY)
+    public static final RegistryObject<EntityType<AntikingEntity>> ANTIKING = registerEntity("antiking", AntikingEntity::new, MobCategory.MONSTER);
+    public static final RegistryObject<Item> ANTIKING_EGG = registerEntityEgg("antiking", ANTIKING);
+
 
     public static void register()
     {
@@ -131,6 +145,7 @@ public class Registration
         ITEM_REGISTER.register(bus);
         BLOCK_ENTITY_REGISTER.register(bus);
         CONTAINER_REGISTER.register(bus);
+        ENTITY_REGISTER.register(bus);
     }
 
 
@@ -171,6 +186,20 @@ public class Registration
     public static <C extends AbstractContainerMenu, M extends MenuType<C>> RegistryObject<MenuType<C>> registerContainer(String name, Supplier<M> supplier)
     {
         return CONTAINER_REGISTER.register(name, supplier);
+    }
+
+    public static <E extends Entity> RegistryObject<EntityType<E>> registerEntity(String name, EntityType.EntityFactory<E> supplier, MobCategory category)
+    {
+        return ENTITY_REGISTER.register(name, () -> EntityType.Builder.of(supplier, category)
+                .sized(0.6f, 1.95f)
+                .clientTrackingRange(8)
+                .setShouldReceiveVelocityUpdates(false)
+                .build(name));
+    }
+
+    public static <E extends Mob> RegistryObject<Item> registerEntityEgg(String name, RegistryObject<EntityType<E>> registeredEntity)
+    {
+        return ITEM_REGISTER.register(name, () -> new ForgeSpawnEggItem(registeredEntity, 0x000000, 0xff0000, ITEM_PROPERTIES));
     }
 
 }

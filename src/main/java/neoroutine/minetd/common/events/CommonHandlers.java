@@ -2,9 +2,11 @@ package neoroutine.minetd.common.events;
 
 import neoroutine.minetd.MineTD;
 import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
+import neoroutine.minetd.common.entities.antiking.AntikingEntity;
 import neoroutine.minetd.common.grandmaster.ClientboundPlayerEloPointsUpdateMessage;
 import neoroutine.minetd.common.grandmaster.EloRatingProvider;
 import neoroutine.minetd.common.grandmaster.SimpleNetworkHandler;
+import neoroutine.minetd.common.setup.Registration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -14,6 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -92,4 +95,5 @@ public class CommonHandlers
             System.out.println(String.format("Placer = %s", tower.grandmaster.getGrandmasterName()));
         }
     }
+
 }
