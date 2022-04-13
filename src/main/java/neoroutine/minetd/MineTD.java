@@ -13,16 +13,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-//TODO:Chess theme (dungeon defenders king's game inspired)
-//TODO:Implement a point system, held 30s -> x points (points can be used to create other resources)
-//TODO:3D rendering of tower attacks/actions
 //TODO:Player as a moving tower thanks to a magic staff
 //TODO:Better generators should only consume specific fuel items
 //TODO:Create a template for json blockstates (tower template)
 //TODO:Recipes
 //TODO:Javadoc
-//TODO:Take a stance on this. or juste accessing the variable
 //TODO:Reduce life when placing tower to avoid spamming ?
+//TODO:King stuff with a facing property
 @Mod("minetd")
 public class MineTD
 {

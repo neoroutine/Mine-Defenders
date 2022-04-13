@@ -20,7 +20,7 @@ public class AntikingEntity extends Monster
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new AntikingFindKingGoal(this, 1.3));
+        this.goalSelector.addGoal(0, new AntikingFindKingGoal(this, 1));
         this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class,8.0F));
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
@@ -32,6 +32,6 @@ public class AntikingEntity extends Monster
                 .add(Attributes.ATTACK_DAMAGE, 3.0)
                 .add(Attributes.MAX_HEALTH, 20.0)
                 .add(Attributes.FOLLOW_RANGE, 40.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.3);
+                .add(Attributes.MOVEMENT_SPEED, 0.2);
     }
 }

@@ -1,11 +1,16 @@
 package neoroutine.minetd.common.blocks.blockentity.king;
 
+import neoroutine.minetd.common.entities.antiking.AntikingEntity;
 import neoroutine.minetd.common.setup.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,6 +22,7 @@ import javax.annotation.Nullable;
 
 public class KingBlockEntity extends BlockEntity
 {
+    private int counter = 0;
 
     public KingBlockEntity(BlockPos position, BlockState state)
     {
@@ -31,9 +37,27 @@ public class KingBlockEntity extends BlockEntity
 
     public void tickServer()
     {
-        //BlockState blockState = level.getBlockState(worldPosition);
-        //setChanged();
-        //level.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL);
+        BlockPos pos = getBlockPos();
+        EntityType<AntikingEntity> mob = Registration.ANTIKING.get();
+
+        Runnable task = () ->
+        {
+            mob.spawn((ServerLevel) level, null, ((ServerLevel) level).getRandomPlayer(), new BlockPos(pos.getX(), pos.getY(), pos.getZ()+20), MobSpawnType.EVENT, false, false);
+        };
+
+        delayedPredicate(task);
+
+    }
+
+    private void delayedPredicate(Runnable task)
+    {
+        if (counter >= 40)
+        {
+            task.run();
+            counter = 0;
+        }
+
+        counter++;
     }
 
     @Override
@@ -41,7 +65,6 @@ public class KingBlockEntity extends BlockEntity
     {
         super.load(tag);
         loadClientData(tag);
-
     }
 
     @Override

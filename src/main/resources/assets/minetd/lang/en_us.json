@@ -4,6 +4,7 @@
   "block.minetd.pawn": "Pawn",
   "block.minetd.rook": "Rook",
   "block.minetd.king": "King",
+  "block.minetd.labyrinth_glass": "Labyrinth Glass",
   "item.minetd.tower_analyzer": "Tower Analyzer",
   "item.minetd.tower_base_fragment": "Tower base fragment",
   "item.minetd.antiking": "Antiking Egg",

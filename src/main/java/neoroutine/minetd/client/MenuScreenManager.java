@@ -35,6 +35,8 @@ public class MenuScreenManager
 
             MenuScreens.register(Registration.KING_CONTAINER.get(), KingScreen::new);
             ItemBlockRenderTypes.setRenderLayer(Registration.KING.get(), RenderType.translucent());
+
+            ItemBlockRenderTypes.setRenderLayer(Registration.LABYRINTH_GLASS.get(), RenderType.translucent());
         });
     }
 }

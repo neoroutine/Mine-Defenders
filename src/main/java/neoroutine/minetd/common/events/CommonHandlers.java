@@ -1,16 +1,28 @@
 package neoroutine.minetd.common.events;
 
 import neoroutine.minetd.MineTD;
+import neoroutine.minetd.common.blocks.blockentity.king.KingBlockEntity;
 import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
 import neoroutine.minetd.common.entities.antiking.AntikingEntity;
 import neoroutine.minetd.common.grandmaster.ClientboundPlayerEloPointsUpdateMessage;
 import neoroutine.minetd.common.grandmaster.EloRatingProvider;
 import neoroutine.minetd.common.grandmaster.SimpleNetworkHandler;
 import neoroutine.minetd.common.setup.Registration;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.EggItem;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -92,8 +104,180 @@ public class CommonHandlers
         if (placedBe instanceof TowerBlockEntity tower)
         {
             tower.updatePlacer((Player)event.getEntity());
-            System.out.println(String.format("Placer = %s", tower.grandmaster.getGrandmasterName()));
+        }
+
+        else if (placedBe instanceof KingBlockEntity king)
+        {
+            Level level = king.getLevel();
+            BlockPos pos = king.getBlockPos();
+
+            buildKingFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL);
+            buildKingJail(king, Registration.LABYRINTH_GLASS.get());
+
+            buildKingHallwayFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL, 5, 50);
+            buildKingHallwayWalls(king, Registration.LABYRINTH_GLASS.get(), 5, 50);
+
         }
     }
+
+    @SubscribeEvent
+    public static void blockDestruction(BlockEvent.BreakEvent event)
+    {
+        Level level = event.getPlayer().level;
+
+        BlockEntity brokenBe = level.getBlockEntity(event.getPos());
+        if (brokenBe instanceof KingBlockEntity king)
+        {
+            buildKingFloor(king, Blocks.GRASS_BLOCK, Blocks.GRASS_BLOCK);
+            buildKingJail(king, Blocks.AIR);
+
+            buildKingHallwayFloor(king, Blocks.GRASS_BLOCK, Blocks.GRASS_BLOCK, 5, 50);
+            buildKingHallwayWalls(king, Blocks.AIR, 5, 50);
+        }
+    }
+
+    public static void buildKingFloor(KingBlockEntity king, Block buildingBlockA, Block buildingBlockB)
+    {
+        BlockPos pos = king.getBlockPos();
+        Level level = king.getLevel();
+
+        //Upper left origin (Ground)
+        BlockPos ulo = new BlockPos(pos.getX() + 3, pos.getY() - 1, pos.getZ() + 3);
+
+        BlockPos currentPos = ulo;
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if ((i + j) % 2 == 0)
+                {
+                    level.setBlock(currentPos, buildingBlockA.defaultBlockState(), Block.UPDATE_ALL);
+                }
+                else
+                {
+                    level.setBlock(currentPos, buildingBlockB.defaultBlockState(), Block.UPDATE_ALL);
+                }
+                currentPos = new BlockPos(currentPos.getX() - 1, currentPos.getY(), currentPos.getZ());
+            }
+
+            currentPos = new BlockPos(ulo.getX(), currentPos.getY(), currentPos.getZ() - 1);
+        }
+    }
+
+    public static void buildKingHallwayFloor(KingBlockEntity king, Block buildingBlockA, Block buildingBlockB, int width, int length)
+    {
+        //Lower left origin (Ground)
+        BlockPos pos = king.getBlockPos();
+        Level level = king.getLevel();
+
+        BlockPos center = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ() + 4);
+
+        BlockPos currentPos = new BlockPos(center.getX() + width/2, center.getY(), center.getZ());
+        for (int i = 0; i < length; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY(), currentPos.getZ()),            Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+                level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+1, currentPos.getZ()), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+                level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+2, currentPos.getZ()), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+                level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+3, currentPos.getZ()), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+
+
+                if ((i + j) % 2 == 0)
+                {
+                    level.setBlock(currentPos, buildingBlockA.defaultBlockState(), Block.UPDATE_ALL);
+                }
+                else
+                {
+                    level.setBlock(currentPos, buildingBlockB.defaultBlockState(), Block.UPDATE_ALL);
+                }
+
+                currentPos = new BlockPos(currentPos.getX() - 1, currentPos.getY(), currentPos.getZ());
+            }
+            currentPos = new BlockPos(center.getX() + width/2, currentPos.getY(), currentPos.getZ() + 1);
+        }
+    }
+
+    public static void buildKingHallwayWalls(KingBlockEntity king, Block buildingBlock, int width, int length)
+    {
+        BlockPos pos = king.getBlockPos();
+        Level level = king.getLevel();
+
+        BlockPos center = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 4);
+
+        BlockPos currentPos = new BlockPos(center.getX() + width/2, center.getY(), center.getZ());
+        for (int i = 0; i < length+1; i++)
+        {
+            level.setBlock(currentPos, buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+            level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+1, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+
+            level.setBlock(new BlockPos(center.getX() - width/2, currentPos.getY(), currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+            level.setBlock(new BlockPos(center.getX() - width/2, currentPos.getY()+1, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+
+            currentPos = new BlockPos(center.getX() + width/2, currentPos.getY(), currentPos.getZ()+1);
+        }
+    }
+    public static void buildKingJail(KingBlockEntity king, Block buildingBlock)
+    {
+        BlockPos pos = king.getBlockPos();
+        Level level = king.getLevel();
+
+        //Upper left origin (Ground)
+        BlockPos ulo = new BlockPos(pos.getX() + 3, pos.getY(), pos.getZ() + 3);
+
+        // X-
+        BlockPos currentPos = ulo;
+        for (int i = 0; i < 7; i++)
+        {
+            if (i != 3)
+            {
+                level.setBlock(currentPos, buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+                level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY() + 1, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+            }
+            else
+            {
+                level.setBlock(currentPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+                level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY() + 1, currentPos.getZ()), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+            }
+
+            currentPos = new BlockPos(currentPos.getX() - 1, currentPos.getY(), currentPos.getZ());
+        }
+
+        // Z-
+
+        currentPos = new BlockPos(ulo.getX(), ulo.getY(), ulo.getZ() - 1);
+        for (int i = 0; i < 6; i++)
+        {
+            level.setBlock(currentPos, buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+            level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+1, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+
+            currentPos = new BlockPos(currentPos.getX(), currentPos.getY(), currentPos.getZ() - 1);
+        }
+
+        //Lower right origin
+        BlockPos lro = new BlockPos(pos.getX() - 3, pos.getY(), pos.getZ() - 3);
+        currentPos = lro;
+
+        // Z+
+        for (int i = 0; i < 6; i++)
+        {
+            level.setBlock(currentPos, buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+            level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+1, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+
+            currentPos = new BlockPos(currentPos.getX(), currentPos.getY(), currentPos.getZ() + 1);
+        }
+
+        // X+
+        currentPos = new BlockPos(lro.getX() + 1, lro.getY(), lro.getZ());
+        for (int i = 0; i < 5; i++)
+        {
+
+            level.setBlock(currentPos, buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+            level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+1, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+
+            currentPos = new BlockPos(currentPos.getX() + 1, currentPos.getY(), currentPos.getZ());
+        }
+    }
+
 
 }
