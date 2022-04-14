@@ -1,9 +1,9 @@
 package neoroutine.minetd.common.setup;
 
 import neoroutine.minetd.MineTD;
-import neoroutine.minetd.common.blocks.blockentity.king.KingBlock;
-import neoroutine.minetd.common.blocks.blockentity.king.KingBlockEntity;
-import neoroutine.minetd.common.blocks.blockentity.king.KingContainer;
+import neoroutine.minetd.common.blocks.king.KingBlock;
+import neoroutine.minetd.common.blocks.king.KingBlockEntity;
+import neoroutine.minetd.common.blocks.king.KingContainer;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGenerator;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorBE;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorContainer;
@@ -19,7 +19,6 @@ import neoroutine.minetd.common.blocks.towers.rook.RookContainer;
 import neoroutine.minetd.common.entities.antiking.AntikingEntity;
 import neoroutine.minetd.common.items.TowerAnalyzer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;

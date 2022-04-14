@@ -1,7 +1,5 @@
-package neoroutine.minetd.common.blocks.blockentity.king;
+package neoroutine.minetd.common.blocks.king;
 
-import neoroutine.minetd.common.blocks.towerbase.TowerBaseBE;
-import neoroutine.minetd.common.blocks.towerbase.TowerBaseContainer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

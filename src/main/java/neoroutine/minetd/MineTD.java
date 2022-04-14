@@ -20,6 +20,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 //TODO:Javadoc
 //TODO:Reduce life when placing tower to avoid spamming ?
 //TODO:King stuff with a facing property
+//TODO:Trim out "updatePlayer" shenanigans
+//TODO:Black(1 lane) and white(4lane) kings
 @Mod("minetd")
 public class MineTD
 {

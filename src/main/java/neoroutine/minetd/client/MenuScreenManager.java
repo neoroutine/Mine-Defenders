@@ -1,7 +1,7 @@
 package neoroutine.minetd.client;
 
 import neoroutine.minetd.MineTD;
-import neoroutine.minetd.common.blocks.blockentity.king.KingScreen;
+import neoroutine.minetd.common.blocks.king.KingScreen;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorScreen;
 import neoroutine.minetd.common.blocks.towerbase.TowerBaseScreen;
 import neoroutine.minetd.common.blocks.towers.pawn.PawnScreen;
