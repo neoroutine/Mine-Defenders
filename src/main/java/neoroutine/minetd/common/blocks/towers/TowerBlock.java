@@ -24,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-//TODO Implement common methods/variables among towers, for now blocks are invisible
 
 public class TowerBlock extends Block implements EntityBlock
 {

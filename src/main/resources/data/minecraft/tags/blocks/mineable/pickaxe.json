@@ -5,7 +5,8 @@
     "minetd:minigenerator",
     "minetd:pawn",
     "minetd:rook",
-    "minetd:king",
+    "minetd:black_king",
+    "minetd:white_king",
     "minetd:labyrinth_glass"
   ]
 }

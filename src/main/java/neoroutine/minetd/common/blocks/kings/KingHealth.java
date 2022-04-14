@@ -1,4 +1,4 @@
-package neoroutine.minetd.common.blocks.king;
+package neoroutine.minetd.common.blocks.kings;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -14,11 +14,11 @@ public class KingHealth implements INBTSerializable<Tag>
         super();
     }
 
-    void setMaxHealth(int value) { this.maxHealth = value; onUpdate();}
-    int getMaxHealth() { return this.maxHealth; }
+    public void setMaxHealth(int value) { this.maxHealth = value; onUpdate();}
+    public int getMaxHealth() { return this.maxHealth; }
 
-    void setHealth(int value) { this.health = value; onUpdate();}
-    int getHealth() { return this.health; }
+    public void setHealth(int value) { this.health = value; onUpdate();}
+    public int getHealth() { return this.health; }
 
 
     protected void onUpdate() {}

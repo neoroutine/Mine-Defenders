@@ -1,4 +1,4 @@
-package neoroutine.minetd.common.blocks.king;
+package neoroutine.minetd.common.blocks.kings;
 
 
 import com.mojang.datafixers.util.Pair;
@@ -6,7 +6,6 @@ import net.minecraft.world.item.Item;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Arrays;
 
 public class EloPointsCost {
 

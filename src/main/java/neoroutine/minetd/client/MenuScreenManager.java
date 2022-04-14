@@ -1,8 +1,9 @@
 package neoroutine.minetd.client;
 
 import neoroutine.minetd.MineTD;
-import neoroutine.minetd.common.blocks.king.KingScreen;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorScreen;
+import neoroutine.minetd.common.blocks.kings.black.BlackKingScreen;
+import neoroutine.minetd.common.blocks.kings.white.WhiteKingScreen;
 import neoroutine.minetd.common.blocks.towerbase.TowerBaseScreen;
 import neoroutine.minetd.common.blocks.towers.pawn.PawnScreen;
 import neoroutine.minetd.common.blocks.towers.rook.RookScreen;
@@ -33,8 +34,11 @@ public class MenuScreenManager
             MenuScreens.register(Registration.ROOK_CONTAINER.get(), RookScreen::new);
             ItemBlockRenderTypes.setRenderLayer(Registration.ROOK.get(), RenderType.translucent());
 
-            MenuScreens.register(Registration.KING_CONTAINER.get(), KingScreen::new);
-            ItemBlockRenderTypes.setRenderLayer(Registration.KING.get(), RenderType.translucent());
+            MenuScreens.register(Registration.BLACK_KING_CONTAINER.get(), BlackKingScreen::new);
+            ItemBlockRenderTypes.setRenderLayer(Registration.BLACK_KING.get(), RenderType.translucent());
+
+            MenuScreens.register(Registration.WHITE_KING_CONTAINER.get(), WhiteKingScreen::new);
+            ItemBlockRenderTypes.setRenderLayer(Registration.WHITE_KING.get(), RenderType.translucent());
 
             ItemBlockRenderTypes.setRenderLayer(Registration.LABYRINTH_GLASS.get(), RenderType.translucent());
         });

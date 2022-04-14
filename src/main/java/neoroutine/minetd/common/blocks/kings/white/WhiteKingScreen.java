@@ -1,4 +1,4 @@
-package neoroutine.minetd.common.blocks.king;
+package neoroutine.minetd.common.blocks.kings.white;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import neoroutine.minetd.MineTD;
@@ -8,9 +8,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class KingScreen extends BaseContainerScreen<KingContainer>
+public class WhiteKingScreen extends BaseContainerScreen<WhiteKingContainer>
 {
-    public KingScreen(KingContainer container, Inventory inv, Component name)
+    public WhiteKingScreen(WhiteKingContainer container, Inventory inv, Component name)
     {
         super(container, inv, name, new ResourceLocation(MineTD.MODID, "textures/gui/minigenerator_gui.png"));
     }

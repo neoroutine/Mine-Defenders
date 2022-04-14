@@ -2,7 +2,7 @@ package neoroutine.minetd.common.events;
 
 import neoroutine.minetd.MineTD;
 import neoroutine.minetd.common.blocks.generators.GeneratorBlockEntity;
-import neoroutine.minetd.common.blocks.king.KingBlockEntity;
+import neoroutine.minetd.common.blocks.kings.KingBlockEntity;
 import neoroutine.minetd.common.blocks.towerbase.TowerBaseBE;
 import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
 import neoroutine.minetd.common.grandmaster.ClientboundPlayerEloPointsUpdateMessage;

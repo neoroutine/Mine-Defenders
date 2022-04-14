@@ -26,7 +26,7 @@ public class AntikingFindKingGoal extends MoveToBlockGoal {
         else
         {
             BlockState blockstate = pLevel.getBlockState(pPos);
-            return blockstate.is(Registration.KING.get());
+            return blockstate.is(Registration.BLACK_KING.get()) || blockstate.is(Registration.WHITE_KING.get());
         }
     }
 }

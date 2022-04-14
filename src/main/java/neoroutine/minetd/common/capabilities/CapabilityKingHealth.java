@@ -1,7 +1,6 @@
 package neoroutine.minetd.common.capabilities;
 
-import neoroutine.minetd.common.blocks.king.KingHealth;
-import neoroutine.minetd.common.energy.BurningItem;
+import neoroutine.minetd.common.blocks.kings.KingHealth;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;

@@ -1,7 +1,6 @@
-package neoroutine.minetd.common.blocks.king;
+package neoroutine.minetd.common.blocks.kings;
 
 import neoroutine.minetd.common.capabilities.CapabilityBurningItem;
-import neoroutine.minetd.common.capabilities.CapabilityEnergyProperties;
 import neoroutine.minetd.common.capabilities.CapabilityGrandmaster;
 import neoroutine.minetd.common.capabilities.CapabilityKingHealth;
 import neoroutine.minetd.common.energy.BurningItem;
@@ -15,23 +14,23 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -40,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class KingBlockEntity extends BlockEntity
 {
@@ -51,9 +51,9 @@ public class KingBlockEntity extends BlockEntity
 
     private boolean duplicationStarted = false;
 
-    private AABB boundingBox = null;
+    protected AABB boundingBox = null;
 
-    List<Entity> entities = null;
+    protected List<Entity> entities = null;
 
     //Handle items
     private final ItemStackHandler itemStackHandler = createItemStackHandler();
@@ -68,10 +68,9 @@ public class KingBlockEntity extends BlockEntity
     public final KingHealth health = createHealth();
     private final LazyOptional<KingHealth> healthHandler = LazyOptional.of(() -> health);
 
-    public KingBlockEntity(BlockPos position, BlockState state)
+    public KingBlockEntity(BlockEntityType<?> be, BlockPos position, BlockState state)
     {
-        super(Registration.KING_BE.get(), position, state);
-        boundingBox = new AABB(position).inflate(1);
+        super(be, position, state);
     }
 
     @Override
@@ -87,6 +86,7 @@ public class KingBlockEntity extends BlockEntity
         BlockPos pos = getBlockPos();
         pos = new BlockPos(pos.getX(), pos.getY(), pos.getZ()+30);
 
+        BlockPos finalPos = pos;
         Runnable task = () ->
         {
             //Maybe optimize by querying Monster.class and entities.size() > 0 -> attacked=true
@@ -95,11 +95,18 @@ public class KingBlockEntity extends BlockEntity
             if (attacked) health.setHealth(health.getHealth() - 10);
             if (health.getHealth() <= 0)
             {
-                //
+                health.setHealth(0);
+                this.grandmaster.getPlayer().getCapability(EloRatingProvider.PLAYER_ELO_POINTS).ifPresent(capability ->
+                {
+                    capability.subtractPoints(this.grandmaster.getPlayer(), 5);
+                    int points = capability.getPoints();
+                    String message = String.format("Your king is dead, please retrieve it. Points -%d (%d)", 5, points);
+                    this.grandmaster.getPlayer().displayClientMessage(new TranslatableComponent(message), true);
+                });
             }
         };
 
-        delayedPredicateHealth(task, 40);
+        delayedPredicateHealth(task, 10);
 
 
         if (duplicatedItem.getBurningCounter() > 0)

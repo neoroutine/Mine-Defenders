@@ -1,12 +1,15 @@
 package neoroutine.minetd.common.setup;
 
 import neoroutine.minetd.MineTD;
-import neoroutine.minetd.common.blocks.king.KingBlock;
-import neoroutine.minetd.common.blocks.king.KingBlockEntity;
-import neoroutine.minetd.common.blocks.king.KingContainer;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGenerator;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorBE;
 import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorContainer;
+import neoroutine.minetd.common.blocks.kings.black.BlackKingBlock;
+import neoroutine.minetd.common.blocks.kings.black.BlackKingBlockEntity;
+import neoroutine.minetd.common.blocks.kings.black.BlackKingContainer;
+import neoroutine.minetd.common.blocks.kings.white.WhiteKingBlock;
+import neoroutine.minetd.common.blocks.kings.white.WhiteKingBlockEntity;
+import neoroutine.minetd.common.blocks.kings.white.WhiteKingContainer;
 import neoroutine.minetd.common.blocks.towerbase.TowerBase;
 import neoroutine.minetd.common.blocks.towerbase.TowerBaseBE;
 import neoroutine.minetd.common.blocks.towerbase.TowerBaseContainer;
@@ -120,14 +123,23 @@ public class Registration
             IForgeMenuType.create((windowId, inv, data) -> new RookContainer(windowId, data.readBlockPos(), inv, inv.player));
     public static final RegistryObject<MenuType<RookContainer>> ROOK_CONTAINER = registerContainer("rook", ROOK_CONTAINER_SUPPLIER);
 
-    //KING (BECS)
-    public static final RegistryObject<KingBlock> KING = registerBlock("king", KingBlock::new);
-    public static final RegistryObject<Item> KING_ITEM = registerItem(KING);
-    public static final RegistryObject<BlockEntityType<KingBlockEntity>> KING_BE = registerBlockEntity("king", KingBlockEntity::new, KING);
+    //BLACK KING (BECS)
+    public static final RegistryObject<BlackKingBlock> BLACK_KING = registerBlock("black_king", BlackKingBlock::new);
+    public static final RegistryObject<Item> BLACK_KING_ITEM = registerItem(BLACK_KING);
+    public static final RegistryObject<BlockEntityType<BlackKingBlockEntity>> BLACK_KING_BE = registerBlockEntity("black_king", BlackKingBlockEntity::new, BLACK_KING);
 
-    public static final Supplier<MenuType<KingContainer>> KING_CONTAINER_SUPPLIER = () ->
-            IForgeMenuType.create((windowId, inv, data) -> new KingContainer(windowId, data.readBlockPos(), inv, inv.player));
-    public static final RegistryObject<MenuType<KingContainer>> KING_CONTAINER = registerContainer("king", KING_CONTAINER_SUPPLIER);
+    public static final Supplier<MenuType<BlackKingContainer>> BLACK_KING_CONTAINER_SUPPLIER = () ->
+            IForgeMenuType.create((windowId, inv, data) -> new BlackKingContainer(windowId, data.readBlockPos(), inv, inv.player));
+    public static final RegistryObject<MenuType<BlackKingContainer>> BLACK_KING_CONTAINER = registerContainer("king", BLACK_KING_CONTAINER_SUPPLIER);
+
+    //WHITE KING (BECS)
+    public static final RegistryObject<WhiteKingBlock> WHITE_KING = registerBlock("white_king", WhiteKingBlock::new);
+    public static final RegistryObject<Item> WHITE_KING_ITEM = registerItem(WHITE_KING);
+    public static final RegistryObject<BlockEntityType<WhiteKingBlockEntity>> WHITE_KING_BE = registerBlockEntity("white_king", WhiteKingBlockEntity::new, WHITE_KING);
+
+    public static final Supplier<MenuType<WhiteKingContainer>> WHITE_KING_CONTAINER_SUPPLIER = () ->
+            IForgeMenuType.create((windowId, inv, data) -> new WhiteKingContainer(windowId, data.readBlockPos(), inv, inv.player));
+    public static final RegistryObject<MenuType<WhiteKingContainer>> WHITE_KING_CONTAINER = registerContainer("white_king", WHITE_KING_CONTAINER_SUPPLIER);
 
     //TODO:Implement artificial veins later on in chess theme ??
     //public static final RegistryObject<Block> ARTIFICIAL_VEINS     = registerBlock("artificial_veins");
