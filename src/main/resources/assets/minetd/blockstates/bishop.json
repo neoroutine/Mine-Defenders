@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minetd:block/bishop",
+      "y": 90
+    },
+
+    "facing=north": {
+      "model": "minetd:block/bishop"
+    },
+
+    "facing=south": {
+      "model": "minetd:block/bishop",
+      "y": 180
+    },
+
+    "facing=west": {
+      "model": "minetd:block/bishop",
+      "y": 270
+    }
+  }
+}

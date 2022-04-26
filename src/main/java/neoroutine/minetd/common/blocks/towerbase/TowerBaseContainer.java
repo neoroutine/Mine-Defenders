@@ -6,6 +6,7 @@ import neoroutine.minetd.common.energy.BaseEnergyProperties;
 import neoroutine.minetd.common.energy.BaseEnergyStorage;
 import neoroutine.minetd.common.setup.Registration;
 
+import net.minecraft.client.gui.screens.inventory.CraftingScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +21,7 @@ public class TowerBaseContainer extends BaseContainer
     {
         super(Registration.TOWER_BASE_CONTAINER, Registration.TOWER_BASE, windowId, position, playerInventory, player);
     }
+
 
     @Override
     protected void trackPower()

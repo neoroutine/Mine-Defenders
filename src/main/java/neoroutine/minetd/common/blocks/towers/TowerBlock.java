@@ -44,7 +44,7 @@ public class TowerBlock extends Block implements EntityBlock
                 .requiresCorrectToolForDrops());
     }
 
-    //Implement safety checks later on (size of string))==
+    //TODO:Implement safety checks later on (size of string))==
     public String getBlockMessage() { return this.BLOCK_MESSAGE; }
     protected void setBlockMessage(String value){ this.BLOCK_MESSAGE = value; }
 

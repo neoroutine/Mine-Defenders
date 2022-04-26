@@ -22,4 +22,6 @@ public class BlackKingBlockEntity extends KingBlockEntity
         Direction facing = state.getValue(HorizontalDirectionalBlock.FACING);
         boundingBox = new AABB(position).inflate(1);
     }
+
+
 }

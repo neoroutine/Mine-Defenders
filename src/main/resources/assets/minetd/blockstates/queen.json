@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minetd:block/queen",
+      "y": 90
+    },
+
+    "facing=north": {
+      "model": "minetd:block/queen"
+    },
+
+    "facing=south": {
+      "model": "minetd:block/queen",
+      "y": 180
+    },
+
+    "facing=west": {
+      "model": "minetd:block/queen",
+      "y": 270
+    }
+  }
+}

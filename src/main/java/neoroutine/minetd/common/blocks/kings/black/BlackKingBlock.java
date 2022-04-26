@@ -2,9 +2,6 @@ package neoroutine.minetd.common.blocks.kings.black;
 
 import neoroutine.minetd.common.blocks.kings.KingBlock;
 import neoroutine.minetd.common.blocks.kings.KingBlockEntity;
-import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
-import neoroutine.minetd.common.blocks.towers.pawn.PawnBE;
-import neoroutine.minetd.common.blocks.towers.pawn.PawnContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -31,7 +28,7 @@ public class BlackKingBlock extends KingBlock
 
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING_PROPERTY, Direction.SOUTH));
 
-        setBlockMessage("A King, be prepared!");
+        setBlockMessage("A King, be prepared to defend its lane!");
         setScreenMessage("Black King");
         setTowerName("Black King");
     }

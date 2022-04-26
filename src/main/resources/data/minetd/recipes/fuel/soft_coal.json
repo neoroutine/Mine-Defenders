@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " c ",
+    "cic",
+    " c "
+  ],
+  "key":
+  {
+    "c":
+    {
+      "item": "minecraft:coal"
+    },
+    "i":
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:soft_coal",
+    "count": 2
+  }
+}

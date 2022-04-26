@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "rcr",
+    "ctc",
+    "rcr"
+  ],
+  "key":
+  {
+    "r":
+    {
+      "item": "minecraft:redstone"
+    },
+    "c":
+    {
+      "item": "minetd:neutron_coal"
+    },
+    "t":
+    {
+      "item": "minetd:tower_base"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:neutron_generator",
+    "count": 1
+  }
+}

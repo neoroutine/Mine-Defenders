@@ -2,7 +2,7 @@
   "replace": false,
   "values": [
     "minetd:tower_base",
-    "minetd:minigenerator",
+    "minetd:soft_generator",
     "minetd:pawn",
     "minetd:rook",
     "minetd:black_king",

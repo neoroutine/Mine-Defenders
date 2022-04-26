@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "rdr",
+    "kpb",
+    "ror"
+  ],
+  "key":
+  {
+    "r":
+    {
+      "item": "minecraft:redstone"
+    },
+    "p":
+    {
+      "item": "minetd:pawn"
+    },
+    "k":
+    {
+      "item": "minetd:knight"
+    },
+    "b":
+    {
+      "item": "minetd:bishop"
+    },
+    "o":
+    {
+      "item": "minetd:rook"
+    },
+    "d":
+    {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:queen",
+    "count": 1
+  }
+}

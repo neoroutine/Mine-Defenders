@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "minetd:block/towers/knight",
+    "front": "minetd:block/towers/knight_front",
+    "side": "minetd:block/towers/knight"
+  }
+}

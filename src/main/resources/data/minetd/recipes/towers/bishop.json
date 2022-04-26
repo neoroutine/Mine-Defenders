@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "rgr",
+    "ptp",
+    "rpr"
+  ],
+  "key":
+  {
+    "r":
+    {
+      "item": "minecraft:redstone"
+    },
+    "p":
+    {
+      "item": "minetd:pawn"
+    },
+    "t":
+    {
+      "item": "minetd:tower_base"
+    },
+    "g":
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:bishop",
+    "count": 1
+  }
+}

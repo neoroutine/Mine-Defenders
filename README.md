@@ -2,7 +2,7 @@
 
 # ⛏️`Mine Defenders`♟️
 
-<img src="images/logo_upscaled.png" width="300" height="300">
+<img src="images/logo_upscaled_2x.png" width="300" height="300">
 
 ## Tower Defense in Minecraft !
 
@@ -10,59 +10,85 @@ This mod brings a **whole new gameplay element** to Minecraft and much more with
 - **Automatic** and **efficient** base protection
 - A **tiered system** based on the infamous chess pieces and their uses 
 
-**Pawn** [Small Damage/Big delay] -> **Rook** [Medium Damage/Medium delay] -> **Bishop** [Impactful Damage/Small delay] -> **Queen** [Crazy Damage/Tiny delay]
-- A point based **reward system**, the longer your king stays alive against the enemy, the wealthier you'll get. Points can be converted into **valuable** resources such as **diamonds** or **other mod items**.
+**Pawn** [Small Damage/Big delay] -> **Knight** [Impactful Damage/Medium delay] <-> **Bishop** [Medium Damage/Small delay] -> **Rook** [Impactful damage/Small delay] -> **Queen** [Crazy Damage/Tiny delay]
+- A point based **reward system**, the more enemies you get rid of thanks to all of your tools (towers, staffs, relics), the more elo points you'll have. Points can be converted into **valuable** resources such as **diamonds** or **useful mod items**.
 
-<div id="illustrations" >
-<img src="images/overview.png" width="400" >
+<img src="images/overview.png">
+<img src="images/overview2.png" >
 
-<p style="font-style: italic;text-align: center;">Tower setup ready to defend the king from a wave of zombies</p>
-</div>
+
 
 ## The energy system (Generators)
-Generators are the main way (for now) to generate energy and power the towers
+Generators are the main way to generate energy and power the towers.
+Generators exist in a tiered system:
+- Soft Generator (T1, Small Generation/Capacity)
+- Dense Generator (T2, Medium Generation/Capacity)
+- Neutron Generator (T3, Big Generation/Capacity)
+
+Plus ! A new kind of fuel has been developed for these new generators:
+- Soft Coal
+- Dense Coal
+- Neutron coal
+
+<img src="images/generator_gui.png" width="400" >
 
 
-<img src="images/minigenerator_gui.png" width="400" >
+<img src="images/generators.png" width="400" >
+
+## Tower base
+The middle man between the generator and the tower, transferring power at a flexible rate.
+
+<img src="images/tower_base_gui.png" width="400" >
+<img src="images/tower_base.png" width="400" >
+
 
 ## Towers
-All the chess pieces have their own set of moves, the towers follow this principle in some way. Each of the four towers have different reach (boxes), reflecting how powerful/mobile the chess pieces are.
+All the chess pieces have their own set of moves, the towers follow this principle in some way. Each of the four towers have different reach (boxes), reflecting how powerful/mobile the chess pieces are. All the towers can drop their move so that you can craft their respective staff
 
-<div id="illustrations" width="400px">
-<img src="images/chain.png" width="400" >
-
-<p style="font-style: italic;text-align: center;">Typical tower setup</p>
-</div>
-
-<div id="illustrations" width="400px">
+<img src="images/tower_gui.png" width="400" >
 <img src="images/tower.png" width="400" >
+<img src="images/aabb.png" width="400" >
+<img src="images/aabb2.png" width="400" >
 
-<p style="font-style: italic;text-align: center;">Tower GUI indicating energy held, tower owner's name and UUID</p>
+
+
 </div>
+
+## Staffs
+Your towers won't be ones doing all the work, put some too with Tower staffs :
+- Pawn staff (Small damage/reach, big cooldown)
+- Knight staff (Big damage/Medium Reach, medium cooldown)
+- Bishop staff (Medium damage/Big reach, medium cooldown)
+- Rook staff (Big damage/Big reach, small cooldown)
+- Queen staff (Crazy damage and crazy reach, tiny cooldown)
+
+<img src="images/staffs.png">
+
+## Relics
+Staffs have a cooldown and short range combat is difficult with them, introducing Relics:
+- Sicilian Defense: Push your enemies away from your precious king
+- Queen's Gambit: Deal big damage to your enemies, no knockback though
+- King's March: Get rid of all of them, big damage and big knockback
+
+<img src="images/relics.png" width="400">
+
+From left to right : Sicilian Defense, Queen's Gambit and King's March
+
+## Kings
+This mod features two kings to defend:
+- The black king, guard one lane and defend your king
+- The white king, guard four lanes and be ready to give it your all !
+
+Once placed, these blocks will build an arena where you will be able to place your towers under one rule : You cannot block the path of the enemies
+
+<img src="images/black_king.png" width="400">
+<img src="images/white_king.png" width="400">
 
 
 ## Enemies
 You'll have to defend yourself and your king from numerous enemies including fast moving ones, teleporting ones and much more, all aiming for the king !
-<div id="illustrations" width="400px">
+
 <img src="images/antiking.png" width="400" >
-
-
-<p style="font-style: italic;text-align: center;">An antiking</p>
-</div>
-
-## As a whole
-<div id="illustrations" width="400px">
-<img src="images/chain.png" width="400" >
-
-
-<p style="font-style: italic;text-align: center;">Typical chained setup</p>
-</div>
-- The rightmost block is the **generator** (Minigenerator here, smallest generator available). Burning classic fuel items to generate power.
-
-- The middle one is the **tower base**, it acts as the base for every tower (structurally and energy wise, no energy can flow between generators and towers). It can be seen as the white/black square on the chess board.
-
-- The rightmost one is the **actual tower**, a Rook tower here (T2).
-
 
 
 ## Currently ✔️
@@ -71,16 +97,16 @@ You'll have to defend yourself and your king from numerous enemies including fas
 - Generators (Minigenerator) ✔️
 - Chess theme ✔️
 - 3D Rendering of reach boxes for all towers ✔️
+- All recipes ✔️
+- Higher tier towers and generators ✔️
+- King to protect (Crystal or core in td games) ✔️
+- Player involved combat (Magic staff akin to Dungeon Defenders') ✔️
+- Point based reward system ✔️
 
 
 ## TODOs ⚠️ / ❌
-- All recipes ⚠️
 - Javadoc ⚠️
-- Higher tier towers and generators ⚠️
-- Point based reward system ⚠️
-- King to protect (Crystal or core in td games) ⚠️
 - New monsters to fight ⚠️
-- Player involved combat (Magic staff akin to Dungeon Defenders') ❌
 
 
 

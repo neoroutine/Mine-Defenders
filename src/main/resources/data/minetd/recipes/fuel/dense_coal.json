@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " g ",
+    "gcg",
+    " g "
+  ],
+  "key":
+  {
+    "c":
+    {
+      "item": "minetd:soft_coal"
+    },
+    "g":
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:dense_coal",
+    "count": 2
+  }
+}

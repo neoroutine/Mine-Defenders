@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "fcf",
+    "iti",
+    "fif"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "minetd:tower_base_fragment"
+    },
+    "i":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "t":
+    {
+      "item": "minetd:tower_base"
+    },
+    "c":
+    {
+      "item": "minecraft:compass"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:pawn",
+    "count": 1
+  }
+}

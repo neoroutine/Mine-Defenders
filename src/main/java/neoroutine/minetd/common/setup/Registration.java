@@ -1,9 +1,15 @@
 package neoroutine.minetd.common.setup;
 
 import neoroutine.minetd.MineTD;
-import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGenerator;
-import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorBE;
-import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorContainer;
+import neoroutine.minetd.common.blocks.generators.densegenerator.DenseGenerator;
+import neoroutine.minetd.common.blocks.generators.densegenerator.DenseGeneratorBlockEntity;
+import neoroutine.minetd.common.blocks.generators.densegenerator.DenseGeneratorContainer;
+import neoroutine.minetd.common.blocks.generators.neutrongenerator.NeutronGenerator;
+import neoroutine.minetd.common.blocks.generators.neutrongenerator.NeutronGeneratorBlockEntity;
+import neoroutine.minetd.common.blocks.generators.neutrongenerator.NeutronGeneratorContainer;
+import neoroutine.minetd.common.blocks.generators.softgenerator.SoftGenerator;
+import neoroutine.minetd.common.blocks.generators.softgenerator.SoftGeneratorBlockEntity;
+import neoroutine.minetd.common.blocks.generators.softgenerator.SoftGeneratorContainer;
 import neoroutine.minetd.common.blocks.kings.black.BlackKingBlock;
 import neoroutine.minetd.common.blocks.kings.black.BlackKingBlockEntity;
 import neoroutine.minetd.common.blocks.kings.black.BlackKingContainer;
@@ -13,14 +19,28 @@ import neoroutine.minetd.common.blocks.kings.white.WhiteKingContainer;
 import neoroutine.minetd.common.blocks.towerbase.TowerBase;
 import neoroutine.minetd.common.blocks.towerbase.TowerBaseBE;
 import neoroutine.minetd.common.blocks.towerbase.TowerBaseContainer;
-import neoroutine.minetd.common.blocks.towers.pawn.Pawn;
-import neoroutine.minetd.common.blocks.towers.pawn.PawnBE;
+import neoroutine.minetd.common.blocks.towers.bishop.BishopBlock;
+import neoroutine.minetd.common.blocks.towers.bishop.BishopBlockEntity;
+import neoroutine.minetd.common.blocks.towers.bishop.BishopContainer;
+import neoroutine.minetd.common.blocks.towers.knight.KnightBlock;
+import neoroutine.minetd.common.blocks.towers.knight.KnightBlockEntity;
+import neoroutine.minetd.common.blocks.towers.knight.KnightContainer;
+import neoroutine.minetd.common.blocks.towers.pawn.PawnBlock;
+import neoroutine.minetd.common.blocks.towers.pawn.PawnBlockEntity;
 import neoroutine.minetd.common.blocks.towers.pawn.PawnContainer;
-import neoroutine.minetd.common.blocks.towers.rook.Rook;
-import neoroutine.minetd.common.blocks.towers.rook.RookBE;
+import neoroutine.minetd.common.blocks.towers.queen.QueenBlock;
+import neoroutine.minetd.common.blocks.towers.queen.QueenBlockEntity;
+import neoroutine.minetd.common.blocks.towers.queen.QueenContainer;
+import neoroutine.minetd.common.blocks.towers.rook.RookBlock;
+import neoroutine.minetd.common.blocks.towers.rook.RookBlockEntity;
 import neoroutine.minetd.common.blocks.towers.rook.RookContainer;
 import neoroutine.minetd.common.entities.antiking.AntikingEntity;
 import neoroutine.minetd.common.items.TowerAnalyzer;
+import neoroutine.minetd.common.items.staffs.*;
+import neoroutine.minetd.common.items.swords.KingMarch;
+import neoroutine.minetd.common.items.swords.QueenGambit;
+import neoroutine.minetd.common.items.swords.SicilianDefense;
+import neoroutine.minetd.common.items.swords.Sword;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -68,7 +88,7 @@ public class Registration
         @Override
         public ItemStack makeIcon()
         {
-            return new ItemStack(Items.BELL);
+            return new ItemStack(Registration.PAWN.get());
         }
     };
 
@@ -77,16 +97,40 @@ public class Registration
     public static final BlockBehaviour.Properties BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.METAL).strength(2f).requiresCorrectToolForDrops();
     public static final Item.Properties ITEM_PROPERTIES = new Item.Properties().tab(MODE_TAB);
 
-    //MINIGENERATOR (BECS)
-    public static final RegistryObject<MiniGenerator> MINIGENERATOR                     = registerBlock("minigenerator", MiniGenerator::new);
-    public static final RegistryObject<Item> MINIGENERATOR_ITEM                         = registerItem(MINIGENERATOR);
-    public static final RegistryObject<BlockEntityType<MiniGeneratorBE>> MINIGERATOR_BE = registerBlockEntity("minigenerator",
-            MiniGeneratorBE::new,
-            MINIGENERATOR);
+    //SOFT_GENERATOR (BECS)
+    public static final RegistryObject<SoftGenerator> SOFT_GENERATOR = registerBlock("soft_generator", SoftGenerator::new);
+    public static final RegistryObject<Item> SOFT_GENERATOR_ITEM = registerItem(SOFT_GENERATOR);
+    public static final RegistryObject<BlockEntityType<SoftGeneratorBlockEntity>> SOFT_GENERATOR_BE = registerBlockEntity("soft_generator",
+            SoftGeneratorBlockEntity::new,
+            SOFT_GENERATOR);
 
-    public static final Supplier<MenuType<MiniGeneratorContainer>> MINIGENERATOR_CONTAINER_SUPPLIER = () ->
-            IForgeMenuType.create((windowId, inv, data) -> new MiniGeneratorContainer(windowId, data.readBlockPos(), inv, inv.player));
-    public static final RegistryObject<MenuType<MiniGeneratorContainer>> MINIGENERATOR_CONTAINER = registerContainer("minigenerator", MINIGENERATOR_CONTAINER_SUPPLIER);
+    public static final Supplier<MenuType<SoftGeneratorContainer>> SOFT_GENERATOR_CONTAINER_SUPPLIER = () ->
+            IForgeMenuType.create((windowId, inv, data) -> new SoftGeneratorContainer(windowId, data.readBlockPos(), inv, inv.player));
+    public static final RegistryObject<MenuType<SoftGeneratorContainer>> SOFT_GENERATOR_CONTAINER = registerContainer("soft_generator", SOFT_GENERATOR_CONTAINER_SUPPLIER);
+
+    //DENSE GENERATOR (BECS)
+    public static final RegistryObject<DenseGenerator> DENSE_GENERATOR = registerBlock("dense_generator", DenseGenerator::new);
+    public static final RegistryObject<Item> DENSE_GENERATOR_ITEM = registerItem(DENSE_GENERATOR);
+    public static final RegistryObject<BlockEntityType<DenseGeneratorBlockEntity>> DENSE_GENERATOR_BE = registerBlockEntity("dense_generator",
+            DenseGeneratorBlockEntity::new,
+            DENSE_GENERATOR);
+
+
+    public static final Supplier<MenuType<DenseGeneratorContainer>> DENSE_GENERATOR_CONTAINER_SUPPLIER = () ->
+            IForgeMenuType.create((windowId, inv, data) -> new DenseGeneratorContainer(windowId, data.readBlockPos(), inv, inv.player));
+    public static final RegistryObject<MenuType<DenseGeneratorContainer>> DENSE_GENERATOR_CONTAINER = registerContainer("dense_generator", DENSE_GENERATOR_CONTAINER_SUPPLIER);
+
+    //NEUTRON GENERATOR (BECS)
+    public static final RegistryObject<NeutronGenerator> NEUTRON_GENERATOR = registerBlock("neutron_generator", NeutronGenerator::new);
+    public static final RegistryObject<Item> NEUTRON_GENERATOR_ITEM = registerItem(NEUTRON_GENERATOR);
+    public static final RegistryObject<BlockEntityType<NeutronGeneratorBlockEntity>> NEUTRON_GENERATOR_BE = registerBlockEntity("neutron_generator",
+            NeutronGeneratorBlockEntity::new,
+            NEUTRON_GENERATOR);
+
+
+    public static final Supplier<MenuType<NeutronGeneratorContainer>> NEUTRON_GENERATOR_CONTAINER_SUPPLIER = () ->
+            IForgeMenuType.create((windowId, inv, data) -> new NeutronGeneratorContainer(windowId, data.readBlockPos(), inv, inv.player));
+    public static final RegistryObject<MenuType<NeutronGeneratorContainer>> NEUTRON_GENERATOR_CONTAINER = registerContainer("neutron_generator", NEUTRON_GENERATOR_CONTAINER_SUPPLIER);
 
 
     //TOWER BASE (BECS)
@@ -105,23 +149,86 @@ public class Registration
     //TOWER ANALYZER (ITEM)
     public static final RegistryObject<TowerAnalyzer> TOWER_ANALYZER = registerItem("tower_analyzer", TowerAnalyzer::new);
 
+    //PAWN MOVE (ITEM)
+    public static final RegistryObject<Item> PAWN_MOVE = registerItem("pawn_move");
+
+    //ROOK MOVE (ITEM)
+    public static final RegistryObject<Item> ROOK_MOVE = registerItem("rook_move");
+
+    //KNIGHT MOVE (ITEM)
+    public static final RegistryObject<Item> KNIGHT_MOVE = registerItem("knight_move");
+
+    //BISHOP MOVE (ITEM)
+    public static final RegistryObject<Item> BISHOP_MOVE = registerItem("bishop_move");
+
+    //QUEEN MOVE (ITEM)
+    public static final RegistryObject<Item> QUEEN_MOVE = registerItem("queen_move");
+
+    //STAFFS (ITEM)
+    public static final RegistryObject<PawnStaff> PAWN_STAFF = registerItem("pawn_staff", PawnStaff::new);
+    public static final RegistryObject<RookStaff> ROOK_STAFF = registerItem("rook_staff", RookStaff::new);
+    public static final RegistryObject<KnightStaff> KNIGHT_STAFF = registerItem("knight_staff", KnightStaff::new);
+    public static final RegistryObject<BishopStaff> BISHOP_STAFF = registerItem("bishop_staff", BishopStaff::new);
+    public static final RegistryObject<QueenStaff> QUEEN_STAFF = registerItem("queen_staff", QueenStaff::new);
+
+    //SWORDS
+    public static final RegistryObject<Item> KING_MARCH       = registerItem("king_march", KingMarch::new);
+    public static final RegistryObject<Item> SICILIAN_DEFENSE = registerItem("sicilian_defense", SicilianDefense::new);
+    public static final RegistryObject<Item> QUEEN_GAMBIT     = registerItem("queen_gambit", QueenGambit::new);
+
+    //SOFT COAL (ITEM)
+    public static final RegistryObject<Item> SOFT_COAL = registerItem("soft_coal");
+
+    //DENSE COAL (ITEM)
+    public static final RegistryObject<Item> DENSE_COAL = registerItem("dense_coal");
+
+    //NEUTRON COAL (ITEM)
+    public static final RegistryObject<Item> NEUTRON_COAL = registerItem("neutron_coal");
+
     //PAWN (BECS)
-    public static final RegistryObject<Pawn> PAWN = registerBlock("pawn", Pawn::new);
+    public static final RegistryObject<PawnBlock> PAWN = registerBlock("pawn", PawnBlock::new);
     public static final RegistryObject<Item> PAWN_ITEM = registerItem(PAWN);
-    public static final RegistryObject<BlockEntityType<PawnBE>> PAWN_BE = registerBlockEntity("pawn", PawnBE::new, PAWN);
+    public static final RegistryObject<BlockEntityType<PawnBlockEntity>> PAWN_BE = registerBlockEntity("pawn", PawnBlockEntity::new, PAWN);
 
     public static final Supplier<MenuType<PawnContainer>> PAWN_CONTAINER_SUPPLIER = () ->
             IForgeMenuType.create((windowId, inv, data) -> new PawnContainer(windowId, data.readBlockPos(), inv, inv.player));
     public static final RegistryObject<MenuType<PawnContainer>> PAWN_CONTAINER = registerContainer("pawn", PAWN_CONTAINER_SUPPLIER);
 
+    //KNIGHT (BECS)
+    public static final RegistryObject<KnightBlock> KNIGHT = registerBlock("knight", KnightBlock::new);
+    public static final RegistryObject<Item> KNIGHT_ITEM = registerItem(KNIGHT);
+    public static final RegistryObject<BlockEntityType<KnightBlockEntity>> KNIGHT_BE = registerBlockEntity("knight", KnightBlockEntity::new, KNIGHT);
+
+    public static final Supplier<MenuType<KnightContainer>> KNIGHT_CONTAINER_SUPPLIER = () ->
+            IForgeMenuType.create((windowId, inv, data) -> new KnightContainer(windowId, data.readBlockPos(), inv, inv.player));
+    public static final RegistryObject<MenuType<KnightContainer>> KNIGHT_CONTAINER = registerContainer("knight", KNIGHT_CONTAINER_SUPPLIER);
+
+    //BISHOP (BECS)
+    public static final RegistryObject<BishopBlock> BISHOP = registerBlock("bishop", BishopBlock::new);
+    public static final RegistryObject<Item> BISHOP_ITEM = registerItem(BISHOP);
+    public static final RegistryObject<BlockEntityType<BishopBlockEntity>> BISHOP_BE = registerBlockEntity("bishop", BishopBlockEntity::new, BISHOP);
+
+    public static final Supplier<MenuType<BishopContainer>> BISHOP_CONTAINER_SUPPLIER = () ->
+            IForgeMenuType.create((windowId, inv, data) -> new BishopContainer(windowId, data.readBlockPos(), inv, inv.player));
+    public static final RegistryObject<MenuType<BishopContainer>> BISHOP_CONTAINER = registerContainer("bishop", BISHOP_CONTAINER_SUPPLIER);
+
     //ROOK (BECS)
-    public static final RegistryObject<Rook> ROOK = registerBlock("rook", Rook::new);
+    public static final RegistryObject<RookBlock> ROOK = registerBlock("rook", RookBlock::new);
     public static final RegistryObject<Item> ROOK_ITEM = registerItem(ROOK);
-    public static final RegistryObject<BlockEntityType<RookBE>> ROOK_BE = registerBlockEntity("rook", RookBE::new, ROOK);
+    public static final RegistryObject<BlockEntityType<RookBlockEntity>> ROOK_BE = registerBlockEntity("rook", RookBlockEntity::new, ROOK);
 
     public static final Supplier<MenuType<RookContainer>> ROOK_CONTAINER_SUPPLIER = () ->
             IForgeMenuType.create((windowId, inv, data) -> new RookContainer(windowId, data.readBlockPos(), inv, inv.player));
     public static final RegistryObject<MenuType<RookContainer>> ROOK_CONTAINER = registerContainer("rook", ROOK_CONTAINER_SUPPLIER);
+
+    //QUEEN (BECS)
+    public static final RegistryObject<QueenBlock> QUEEN = registerBlock("queen", QueenBlock::new);
+    public static final RegistryObject<Item> QUEEN_ITEM = registerItem(QUEEN);
+    public static final RegistryObject<BlockEntityType<QueenBlockEntity>> QUEEN_BE = registerBlockEntity("queen", QueenBlockEntity::new, QUEEN);
+
+    public static final Supplier<MenuType<QueenContainer>> QUEEN_CONTAINER_SUPPLIER = () ->
+            IForgeMenuType.create((windowId, inv, data) -> new QueenContainer(windowId, data.readBlockPos(), inv, inv.player));
+    public static final RegistryObject<MenuType<QueenContainer>> QUEEN_CONTAINER = registerContainer("queen", QUEEN_CONTAINER_SUPPLIER);
 
     //BLACK KING (BECS)
     public static final RegistryObject<BlackKingBlock> BLACK_KING = registerBlock("black_king", BlackKingBlock::new);

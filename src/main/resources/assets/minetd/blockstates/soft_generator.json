@@ -1,0 +1,31 @@
+{
+  "multipart":
+  [
+    {
+      "apply":
+      {
+        "model":"minetd:block/soft_generator"
+      }
+    },
+    {
+      "when":
+      {
+        "powered": "false"
+      },
+      "apply":
+      {
+        "model": "minetd:block/soft_generator"
+      }
+    },
+    {
+      "when":
+      {
+        "powered": "true"
+      },
+      "apply":
+      {
+        "model": "minetd:block/soft_generator_powered"
+      }
+    }
+  ]
+}

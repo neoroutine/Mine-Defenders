@@ -1,7 +1,6 @@
 package neoroutine.minetd.common.blocks.towerbase;
 
 import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
-import neoroutine.minetd.common.blocks.towers.pawn.PawnBE;
 import neoroutine.minetd.common.capabilities.CapabilityEnergyProperties;
 import neoroutine.minetd.common.energy.BaseEnergyProperties;
 import neoroutine.minetd.common.energy.BaseEnergyStorage;

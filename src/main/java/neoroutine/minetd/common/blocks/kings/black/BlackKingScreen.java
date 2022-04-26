@@ -12,7 +12,7 @@ public class BlackKingScreen extends BaseContainerScreen<BlackKingContainer>
 {
     public BlackKingScreen(BlackKingContainer container, Inventory inv, Component name)
     {
-        super(container, inv, name, new ResourceLocation(MineTD.MODID, "textures/gui/minigenerator_gui.png"));
+        super(container, inv, name, new ResourceLocation(MineTD.MODID, "textures/gui/king_gui.png"));
     }
 
     @Override
@@ -20,22 +20,23 @@ public class BlackKingScreen extends BaseContainerScreen<BlackKingContainer>
     {
         String health = String.format("%d/%d", menu.getKingHealth(), menu.getKingMaxHealth());
 
-        String duplicatedItemCount = String.format("+%d", menu.getDuplicatedItemCounter());
+        String duplicatedItemCount = String.format("%.2fs left", menu.getDuplicatedItemCounter()/20.0);
         String duplicatedItemName = String.format("[%s]", menu.getDuplicatedItemName());
 
-        String grandmaster = String.format("Grandmaster : %s", menu.getGrandmasterName());
+        String grandmaster = String.format("GM : %s", menu.getGrandmasterName());
+        String grandmasterPoints = String.format("Elo : %d", menu.getGrandmasterEloPoints());
 
-        String uuid = menu.getGrandmasterUUID();
-        if (uuid.length() > 20) { uuid = uuid.substring(0, 19);}
-        String grandmasterUUID = String.format("UUID : %s...", uuid);
+        //String uuid = menu.getGrandmasterUUID();
+        //if (uuid.length() > 20) { uuid = uuid.substring(0, 19);}
+        //String grandmasterUUID = String.format("UUID : %s...", uuid);
 
-        drawString(matrixStack, Minecraft.getInstance().font, health, 60, 5, 0x00ff00);
+        drawString(matrixStack, Minecraft.getInstance().font, health, 120, 5, 0x00ff00);
 
-        drawString(matrixStack, Minecraft.getInstance().font, grandmaster, 80, 20, 0xffffff);
-        drawString(matrixStack, Minecraft.getInstance().font, grandmasterUUID, 70, 30, 0xffffff);
+        drawString(matrixStack, Minecraft.getInstance().font, grandmaster, 10, 5, 0xffffff);
+        drawString(matrixStack, Minecraft.getInstance().font, grandmasterPoints, 10, 15, 0xffffff);
+        //drawString(matrixStack, Minecraft.getInstance().font, grandmasterUUID, 40, 60, 0xffffff);
 
-        drawString(matrixStack, Minecraft.getInstance().font, duplicatedItemCount, 10, 50, 0x00ff00);
-        drawString(matrixStack, Minecraft.getInstance().font, duplicatedItemName, 10, 60, 0xff0000);
+        drawString(matrixStack, Minecraft.getInstance().font, duplicatedItemCount, 110, 30, 0x00ff00);
 
 
     }

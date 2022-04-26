@@ -2,7 +2,9 @@ package neoroutine.minetd.common.events;
 
 import neoroutine.minetd.MineTD;
 import neoroutine.minetd.common.blocks.generators.GeneratorBlockEntity;
+import neoroutine.minetd.common.blocks.kings.KingBlock;
 import neoroutine.minetd.common.blocks.kings.KingBlockEntity;
+import neoroutine.minetd.common.blocks.kings.black.BlackKingBlockEntity;
 import neoroutine.minetd.common.blocks.towerbase.TowerBaseBE;
 import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
 import neoroutine.minetd.common.grandmaster.ClientboundPlayerEloPointsUpdateMessage;
@@ -10,24 +12,30 @@ import neoroutine.minetd.common.grandmaster.EloRatingProvider;
 import neoroutine.minetd.common.grandmaster.SimpleNetworkHandler;
 import neoroutine.minetd.common.setup.Registration;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.enchantment.KnockbackEnchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
+
 
 @Mod.EventBusSubscriber(modid = MineTD.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonHandlers
@@ -102,6 +110,7 @@ public class CommonHandlers
         else if (placedBe instanceof KingBlockEntity king)
         {
             king.updatePlacer((Player)event.getEntity());
+            System.out.println(String.format("Facing : %s", king.getBlockState().getValue(HorizontalDirectionalBlock.FACING).toString()));
             king.grandmaster.getPlayer().getCapability(EloRatingProvider.PLAYER_ELO_POINTS).ifPresent(capability ->
             {
                 capability.subtractPoints(king.grandmaster.getPlayer(), 20);
@@ -110,14 +119,31 @@ public class CommonHandlers
                 king.grandmaster.getPlayer().displayClientMessage(new TranslatableComponent(message), true);
             });
 
-            Level level = king.getLevel();
-            BlockPos pos = king.getBlockPos();
+            Direction facing = king.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
 
-            buildKingFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL);
-            buildKingJail(king, Registration.LABYRINTH_GLASS.get());
 
-            buildKingHallwayFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL, 10, 50);
-            buildKingHallwayWalls(king, Registration.LABYRINTH_GLASS.get(), 10, 50);
+            if (king instanceof BlackKingBlockEntity)
+            {
+                buildKingFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL);
+                buildKingJail(king, Registration.LABYRINTH_GLASS.get(), facing);
+
+                buildKingHallwayFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL, 10, 50, facing);
+                buildKingHallwayWalls(king, Registration.LABYRINTH_GLASS.get(), 10, 50, facing);
+            }
+            else
+            {
+                buildKingFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL);
+
+                buildKingHallwayFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL, 10, 50, Direction.NORTH);
+                buildKingHallwayFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL, 10, 50, Direction.SOUTH);
+                buildKingHallwayFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL, 10, 50, Direction.EAST);
+                buildKingHallwayFloor(king, Blocks.BLACK_WOOL, Blocks.WHITE_WOOL, 10, 50, Direction.WEST);
+
+                buildKingHallwayWalls(king, Registration.LABYRINTH_GLASS.get(), 10, 50, Direction.NORTH);
+                buildKingHallwayWalls(king, Registration.LABYRINTH_GLASS.get(), 10, 50, Direction.SOUTH);
+                buildKingHallwayWalls(king, Registration.LABYRINTH_GLASS.get(), 10, 50, Direction.EAST);
+                buildKingHallwayWalls(king, Registration.LABYRINTH_GLASS.get(), 10, 50, Direction.WEST);
+            }
 
         }
     }
@@ -127,14 +153,35 @@ public class CommonHandlers
     {
         Level level = event.getPlayer().level;
 
+
         BlockEntity brokenBe = level.getBlockEntity(event.getPos());
         if (brokenBe instanceof KingBlockEntity king)
         {
-            buildKingFloor(king, Blocks.GRASS_BLOCK, Blocks.GRASS_BLOCK);
-            buildKingJail(king, Blocks.AIR);
+            Direction facing = king.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
 
-            buildKingHallwayFloor(king, Blocks.GRASS_BLOCK, Blocks.GRASS_BLOCK, 10, 50);
-            buildKingHallwayWalls(king, Blocks.AIR, 10, 50);
+            if (king instanceof BlackKingBlockEntity)
+            {
+                buildKingFloor(king, Blocks.DIRT, Blocks.DIRT);
+                buildKingJail(king, Blocks.AIR, facing);
+
+                buildKingHallwayFloor(king, Blocks.AIR, Blocks.AIR, 10, 50, facing);
+                buildKingHallwayWalls(king, Blocks.AIR, 10, 50, facing);
+            }
+            else
+            {
+                buildKingFloor(king, Blocks.DIRT, Blocks.DIRT);
+                buildKingJail(king, Blocks.AIR, Direction.UP);
+
+                buildKingHallwayFloor(king, Blocks.AIR, Blocks.AIR, 10, 50, Direction.NORTH);
+                buildKingHallwayFloor(king, Blocks.AIR, Blocks.AIR, 10, 50, Direction.SOUTH);
+                buildKingHallwayFloor(king, Blocks.AIR, Blocks.AIR, 10, 50, Direction.EAST);
+                buildKingHallwayFloor(king, Blocks.AIR, Blocks.AIR, 10, 50, Direction.WEST);
+
+                buildKingHallwayWalls(king, Blocks.AIR, 10, 50, Direction.NORTH);
+                buildKingHallwayWalls(king, Blocks.AIR, 10, 50, Direction.SOUTH);
+                buildKingHallwayWalls(king, Blocks.AIR, 10, 50, Direction.EAST);
+                buildKingHallwayWalls(king, Blocks.AIR, 10, 50, Direction.WEST);
+            }
         }
     }
 
@@ -144,7 +191,8 @@ public class CommonHandlers
 
         if (be instanceof GeneratorBlockEntity ||
             be instanceof TowerBaseBE ||
-            be instanceof TowerBlockEntity)
+            be instanceof TowerBlockEntity ||
+            be instanceof KingBlockEntity)
         {
             return true;
         }
@@ -175,11 +223,11 @@ public class CommonHandlers
             {
                 if ((i + j) % 2 == 0)
                 {
-                    level.setBlock(currentPos, buildingBlockA.defaultBlockState(), Block.UPDATE_ALL);
+                    carefulPlace(currentPos, buildingBlockA, level);
                 }
                 else
                 {
-                    level.setBlock(currentPos, buildingBlockB.defaultBlockState(), Block.UPDATE_ALL);
+                    carefulPlace(currentPos, buildingBlockB, level);
                 }
                 currentPos = new BlockPos(currentPos.getX() - 1, currentPos.getY(), currentPos.getZ());
             }
@@ -188,18 +236,60 @@ public class CommonHandlers
         }
     }
 
-    public static void buildKingHallwayFloor(KingBlockEntity king, Block buildingBlockA, Block buildingBlockB, int width, int length)
+    public static void buildKingHallwayFloor(KingBlockEntity king, Block buildingBlockA, Block buildingBlockB, int width, int length, Direction facing)
     {
         //Lower left origin (Ground)
         BlockPos pos = king.getBlockPos();
         Level level = king.getLevel();
 
-        BlockPos center = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ() + 4);
 
-        BlockPos currentPos = new BlockPos(center.getX() + width/2, center.getY(), center.getZ());
+        BlockPos center = null;
+        BlockPos currentPos = null;
+
+        int widthCoefX = 0;
+        int widthCoefZ = 0;
+
+        switch (facing)
+        {
+            //Z+
+            case NORTH:
+                center = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ() + 4);
+                currentPos = new BlockPos(center.getX() + width/2, center.getY(), center.getZ());
+
+                widthCoefX = -1;
+                widthCoefZ = 0;
+                break;
+
+            case SOUTH:
+                center = new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ() - 4);
+                currentPos = new BlockPos(center.getX() - width/2, center.getY(), center.getZ());
+
+                widthCoefX = 1;
+                widthCoefZ = 0;
+                break;
+
+                //X+
+            case WEST:
+                center = new BlockPos(pos.getX() + 4, pos.getY() - 1, pos.getZ());
+                currentPos = new BlockPos(center.getX(), center.getY(), center.getZ() - width/2);
+
+                widthCoefX = 0;
+                widthCoefZ = 1;
+                break;
+
+            case EAST:
+                center = new BlockPos(pos.getX() - 4, pos.getY() - 1, pos.getZ());
+                currentPos = new BlockPos(center.getX(), center.getY(), center.getZ() + width/2);
+
+                widthCoefX = 0;
+                widthCoefZ = -1;
+
+                break;
+        }
+
         for (int i = 0; i < length; i++)
         {
-            for (int j = 0; j < width; j++)
+            for (int j = 0; j < width+1; j++)
             {
                 carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY(), currentPos.getZ()), Blocks.AIR, level);
                 carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+1, currentPos.getZ()), Blocks.AIR, level);
@@ -216,29 +306,92 @@ public class CommonHandlers
                     carefulPlace(currentPos, buildingBlockB, level);
                 }
 
-                currentPos = new BlockPos(currentPos.getX() - 1, currentPos.getY(), currentPos.getZ());
+                currentPos = new BlockPos(currentPos.getX() + 1*widthCoefX, currentPos.getY(), currentPos.getZ() + 1*widthCoefZ);
             }
-            currentPos = new BlockPos(center.getX() + width/2, currentPos.getY(), currentPos.getZ() + 1);
+
+            switch (facing)
+            {
+                case NORTH:
+                    currentPos = new BlockPos(center.getX() + width/2, currentPos.getY(), currentPos.getZ()+1);
+                    break;
+                case SOUTH:
+                    currentPos = new BlockPos(center.getX() - width/2, currentPos.getY(), currentPos.getZ()-1);
+                    break;
+                case WEST:
+                    currentPos = new BlockPos(currentPos.getX()+1, currentPos.getY(), center.getZ() - width/2);
+                    break;
+                case EAST:
+                    currentPos = new BlockPos(currentPos.getX()-1, currentPos.getY(), center.getZ() + width/2);
+                    break;
+            }
+
         }
     }
 
-    public static void buildKingHallwayWalls(KingBlockEntity king, Block buildingBlock, int width, int length)
+    public static void buildKingHallwayWalls(KingBlockEntity king, Block buildingBlock, int width, int length, Direction facing)
     {
         BlockPos pos = king.getBlockPos();
         Level level = king.getLevel();
 
-        BlockPos center = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 4);
+        BlockPos center = null;
+        BlockPos currentPos = null;
 
-        BlockPos currentPos = new BlockPos(center.getX() + width/2, center.getY(), center.getZ());
-        for (int i = 0; i < (width/2) - 3; i++)
+        switch (facing)
         {
-            carefulPlace(new BlockPos(center.getX() + width/2 - i, currentPos.getY(), currentPos.getZ()), buildingBlock, level);
-            carefulPlace(new BlockPos(center.getX() + width/2 - i, currentPos.getY()+1, currentPos.getZ()), buildingBlock, level);
-            carefulPlace(new BlockPos(center.getX() + width/2 - i, currentPos.getY()+2, currentPos.getZ()), buildingBlock, level);
+            //Z+
+            case NORTH:
+                center = new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 4);
+                currentPos = new BlockPos(center.getX() + width/2, center.getY(), center.getZ());
 
-            carefulPlace(new BlockPos(center.getX() - width/2 + i, currentPos.getY(), currentPos.getZ()), buildingBlock, level);
-            carefulPlace(new BlockPos(center.getX() - width/2 + i, currentPos.getY()+1, currentPos.getZ()), buildingBlock, level);
-            carefulPlace(new BlockPos(center.getX() - width/2 + i, currentPos.getY()+2, currentPos.getZ()), buildingBlock, level);
+                break;
+
+            case SOUTH:
+                center = new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 4);
+                currentPos = new BlockPos(center.getX() - width/2, center.getY(), center.getZ());
+
+                break;
+
+            //X+
+            case WEST:
+                center = new BlockPos(pos.getX() + 4, pos.getY(), pos.getZ());
+                currentPos = new BlockPos(center.getX(), center.getY(), center.getZ() - width/2);
+
+                break;
+
+            case EAST:
+                center = new BlockPos(pos.getX() - 4, pos.getY(), pos.getZ());
+                currentPos = new BlockPos(center.getX(), center.getY(), center.getZ() + width/2);
+
+                break;
+        }
+
+        for (int i = 0; i < (width/2) - 2; i++)
+        {
+            switch (facing)
+            {
+                case NORTH:
+                case SOUTH:
+                    carefulPlace(new BlockPos(center.getX() + width/2 - i, currentPos.getY(), currentPos.getZ()), buildingBlock, level);
+                    carefulPlace(new BlockPos(center.getX() + width/2 - i, currentPos.getY()+1, currentPos.getZ()), buildingBlock, level);
+                    carefulPlace(new BlockPos(center.getX() + width/2 - i, currentPos.getY()+2, currentPos.getZ()), buildingBlock, level);
+
+                    carefulPlace(new BlockPos(center.getX() - width/2 + i, currentPos.getY(), currentPos.getZ()), buildingBlock, level);
+                    carefulPlace(new BlockPos(center.getX() - width/2 + i, currentPos.getY()+1, currentPos.getZ()), buildingBlock, level);
+                    carefulPlace(new BlockPos(center.getX() - width/2 + i, currentPos.getY()+2, currentPos.getZ()), buildingBlock, level);
+                    break;
+
+                case WEST:
+                case EAST:
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY(), center.getZ() + width/2 -   i), buildingBlock, level);
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+1, center.getZ() + width/2 - i), buildingBlock, level);
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+2, center.getZ() + width/2 - i), buildingBlock, level);
+
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY(), center.getZ() - width/2 +   i), buildingBlock, level);
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+1, center.getZ() - width/2 + i), buildingBlock, level);
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+2, center.getZ() - width/2 + i), buildingBlock, level);
+                    break;
+            }
+
 
         }
         for (int i = 0; i < length+1; i++)
@@ -247,14 +400,44 @@ public class CommonHandlers
             carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+1, currentPos.getZ()), buildingBlock, level);
             carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+2, currentPos.getZ()), buildingBlock, level);
 
-            carefulPlace(new BlockPos(center.getX() - width/2, currentPos.getY(), currentPos.getZ()), buildingBlock, level);
-            carefulPlace(new BlockPos(center.getX() - width/2, currentPos.getY()+1, currentPos.getZ()), buildingBlock, level);
-            carefulPlace(new BlockPos(center.getX() - width/2, currentPos.getY()+2, currentPos.getZ()), buildingBlock, level);
+            switch (facing)
+            {
+                case NORTH:
+                    carefulPlace(new BlockPos(center.getX() - width/2, currentPos.getY(), currentPos.getZ()), buildingBlock, level);
+                    carefulPlace(new BlockPos(center.getX() - width/2, currentPos.getY()+1, currentPos.getZ()), buildingBlock, level);
+                    carefulPlace(new BlockPos(center.getX() - width/2, currentPos.getY()+2, currentPos.getZ()), buildingBlock, level);
 
-            currentPos = new BlockPos(center.getX() + width/2, currentPos.getY(), currentPos.getZ()+1);
+                    currentPos = new BlockPos(center.getX() + width/2, currentPos.getY(), currentPos.getZ()+1);
+                    break;
+
+                case SOUTH:
+                    carefulPlace(new BlockPos(center.getX() + width/2, currentPos.getY(), currentPos.getZ()), buildingBlock, level);
+                    carefulPlace(new BlockPos(center.getX() + width/2, currentPos.getY()+1, currentPos.getZ()), buildingBlock, level);
+                    carefulPlace(new BlockPos(center.getX() + width/2, currentPos.getY()+2, currentPos.getZ()), buildingBlock, level);
+
+                    currentPos = new BlockPos(center.getX() - width/2, currentPos.getY(), currentPos.getZ()-1);
+                    break;
+
+                case WEST:
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY(), center.getZ() + width/2), buildingBlock, level);
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+1, center.getZ() + width/2), buildingBlock, level);
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+2, center.getZ() + width/2), buildingBlock, level);
+
+                    currentPos = new BlockPos(currentPos.getX() + 1, currentPos.getY(), center.getZ() - width/2);
+                    break;
+
+                case EAST:
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY(), center.getZ() - width/2), buildingBlock, level);
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+1, center.getZ() - width/2), buildingBlock, level);
+                    carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY()+2, center.getZ() - width/2), buildingBlock, level);
+
+                    currentPos = new BlockPos(currentPos.getX() - 1, currentPos.getY(), center.getZ() + width/2);
+                    break;
+            }
+
         }
     }
-    public static void buildKingJail(KingBlockEntity king, Block buildingBlock)
+    public static void buildKingJail(KingBlockEntity king, Block buildingBlock, Direction facing)
     {
         BlockPos pos = king.getBlockPos();
         Level level = king.getLevel();
@@ -266,7 +449,9 @@ public class CommonHandlers
         BlockPos currentPos = ulo;
         for (int i = 0; i < 7; i++)
         {
-            if (i < 2 || i > 4)
+            boolean shouldFillGap = true;
+            if (facing == Direction.NORTH || facing == Direction.UP) { shouldFillGap = (i < 2 || i > 4);}
+            if (shouldFillGap)
             {
                 carefulPlace(currentPos, buildingBlock, level);
                 carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 1, currentPos.getZ()), buildingBlock, level);
@@ -288,10 +473,21 @@ public class CommonHandlers
         currentPos = new BlockPos(ulo.getX(), ulo.getY(), ulo.getZ() - 1);
         for (int i = 0; i < 6; i++)
         {
-            level.setBlock(currentPos, buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
-            level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+1, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
-            level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+2, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+            boolean shouldFillGap = true;
+            if (facing == Direction.WEST || facing == Direction.UP) { shouldFillGap = (i < 1 || i > 3);}
+            if (shouldFillGap)
+            {
+                carefulPlace(currentPos, buildingBlock, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 1, currentPos.getZ()), buildingBlock, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 2, currentPos.getZ()), buildingBlock, level);
+            }
+            else
+            {
+                carefulPlace(currentPos, Blocks.AIR, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 1, currentPos.getZ()), Blocks.AIR, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 2, currentPos.getZ()), Blocks.AIR, level);
 
+            }
 
             currentPos = new BlockPos(currentPos.getX(), currentPos.getY(), currentPos.getZ() - 1);
         }
@@ -303,9 +499,21 @@ public class CommonHandlers
         // Z+
         for (int i = 0; i < 6; i++)
         {
-            level.setBlock(currentPos, buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
-            level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+1, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
-            level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+2, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+            boolean shouldFillGap = true;
+            if (facing == Direction.EAST || facing == Direction.UP) { shouldFillGap = (i < 2 || i > 4);}
+            if (shouldFillGap)
+            {
+                carefulPlace(currentPos, buildingBlock, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 1, currentPos.getZ()), buildingBlock, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 2, currentPos.getZ()), buildingBlock, level);
+            }
+            else
+            {
+                carefulPlace(currentPos, Blocks.AIR, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 1, currentPos.getZ()), Blocks.AIR, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 2, currentPos.getZ()), Blocks.AIR, level);
+
+            }
 
             currentPos = new BlockPos(currentPos.getX(), currentPos.getY(), currentPos.getZ() + 1);
         }
@@ -314,14 +522,26 @@ public class CommonHandlers
         currentPos = new BlockPos(lro.getX() + 1, lro.getY(), lro.getZ());
         for (int i = 0; i < 5; i++)
         {
+            boolean shouldFillGap = true;
+            if (facing == Direction.SOUTH || facing == Direction.UP) { shouldFillGap = (i < 1 || i > 3);}
+            if (shouldFillGap)
+            {
+                carefulPlace(currentPos, buildingBlock, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 1, currentPos.getZ()), buildingBlock, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 2, currentPos.getZ()), buildingBlock, level);
+            }
+            else
+            {
+                carefulPlace(currentPos, Blocks.AIR, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 1, currentPos.getZ()), Blocks.AIR, level);
+                carefulPlace(new BlockPos(currentPos.getX(), currentPos.getY() + 2, currentPos.getZ()), Blocks.AIR, level);
 
-            level.setBlock(currentPos, buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
-            level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+1, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
-            level.setBlock(new BlockPos(currentPos.getX(), currentPos.getY()+2, currentPos.getZ()), buildingBlock.defaultBlockState(), Block.UPDATE_ALL);
+            }
 
             currentPos = new BlockPos(currentPos.getX() + 1, currentPos.getY(), currentPos.getZ());
         }
     }
+
 
 
 }

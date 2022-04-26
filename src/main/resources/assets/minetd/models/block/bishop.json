@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "minetd:block/towers/bishop",
+    "front": "minetd:block/towers/bishop_front",
+    "side": "minetd:block/towers/bishop"
+  }
+}

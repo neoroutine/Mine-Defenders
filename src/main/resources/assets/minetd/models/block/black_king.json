@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all" : "minetd:block/black_king"
+    "all" : "minetd:block/kings/black_king"
   }
 }

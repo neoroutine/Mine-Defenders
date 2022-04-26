@@ -16,6 +16,7 @@ public class TowerBaseScreen extends BaseContainerScreen<TowerBaseContainer>
         super(container, inv, name, new ResourceLocation(MineTD.MODID, "textures/gui/tower_base_gui.png"));
     }
 
+
     @Override
     protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY)
     {

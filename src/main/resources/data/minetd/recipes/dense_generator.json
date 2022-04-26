@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "rcr",
+    "ctc",
+    "rcr"
+  ],
+  "key":
+  {
+    "r":
+    {
+      "item": "minecraft:redstone"
+    },
+    "c":
+    {
+      "item": "minetd:dense_coal"
+    },
+    "t":
+    {
+      "item": "minetd:tower_base"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:dense_generator",
+    "count": 1
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "rp ",
+    "pf ",
+    " f "
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "minetd:tower_base_fragment"
+    },
+    "r":
+    {
+      "item": "minetd:rook_move"
+    },
+    "p":
+    {
+      "item": "minetd:pawn_move"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:queen_gambit",
+    "count": 1
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "mm ",
+    "mf ",
+    "  f"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "minetd:tower_base_fragment"
+    },
+    "m":
+    {
+      "item": "minetd:rook_move"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:rook_staff",
+    "count": 1
+  }
+}

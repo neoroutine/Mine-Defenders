@@ -1,7 +1,6 @@
 package neoroutine.minetd.common.items;
 
 import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
-import neoroutine.minetd.common.blocks.towers.pawn.PawnBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;

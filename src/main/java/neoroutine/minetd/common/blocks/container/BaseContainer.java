@@ -39,7 +39,7 @@ public class BaseContainer<B extends Block, C extends AbstractContainerMenu> ext
         {
             blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler ->
             {
-                addSlot(new SlotItemHandler(handler, 0, 64, 24));
+                addSlot(new SlotItemHandler(handler, 0, 77, 24));
             });
         }
 

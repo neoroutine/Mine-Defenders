@@ -11,7 +11,7 @@ import net.minecraftforge.network.PacketDistributor;
 //https://gitlab.com/LaDestitute/mana-mod-template/-/tree/main/src/main/java/ladestitute/manatemplate
 public class EloRating
 {
-    private int maxPoints = 100;
+    private int maxPoints = 1000;
     private int points = 0;
 
     public int getMaxPoints() { return maxPoints;}

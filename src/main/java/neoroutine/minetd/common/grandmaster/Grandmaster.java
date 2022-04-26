@@ -1,21 +1,13 @@
 package neoroutine.minetd.common.grandmaster;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 //Store all player relevant information
 public class Grandmaster implements INBTSerializable<Tag>
@@ -79,6 +71,18 @@ public class Grandmaster implements INBTSerializable<Tag>
     public String getGrandMasterUUID()
     {
         return this.uuid;
+    }
+
+    public int getGrandmasterEloPoints()
+    {
+        if (player == null) { return 0;}
+        AtomicInteger points = new AtomicInteger();
+        this.player.getCapability(EloRatingProvider.PLAYER_ELO_POINTS).ifPresent(capability ->
+        {
+            points.set(capability.getPoints());
+        });
+
+        return points.get();
     }
 
     protected void onUpdate() {}

@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minetd:block/knight",
+      "y": 90
+    },
+
+    "facing=north": {
+      "model": "minetd:block/knight"
+    },
+
+    "facing=south": {
+      "model": "minetd:block/knight",
+      "y": 180
+    },
+
+    "facing=west": {
+      "model": "minetd:block/knight",
+      "y": 270
+    }
+  }
+}

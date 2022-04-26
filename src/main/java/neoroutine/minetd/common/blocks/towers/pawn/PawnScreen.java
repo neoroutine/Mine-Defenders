@@ -12,22 +12,24 @@ public class PawnScreen extends BaseContainerScreen<PawnContainer>
 {
     public PawnScreen(PawnContainer container, Inventory inv, Component name)
     {
-        super(container, inv, name, new ResourceLocation(MineTD.MODID, "textures/gui/tower_base_gui.png"));
+        super(container, inv, name, new ResourceLocation(MineTD.MODID, "textures/gui/tower_gui.png"));
     }
 
     @Override
     protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY)
     {
         String energyState = String.format("Energy: %d/%d", menu.getEnergy(), menu.getMaxPowerCapacity());
-        String grandmaster = String.format("Grandmaster : %s", menu.getGrandmasterName());
+        String grandmaster = String.format("GM : %s", menu.getGrandmasterName());
+        String grandmasterPoints = String.format("Elo : %d", menu.getGrandmasterEloPoints());
 
-        String uuid = menu.getGrandmasterUUID();
-        if (uuid.length() > 20) { uuid = uuid.substring(0, 19);}
-        String grandmasterUUID = String.format("UUID : %s...", uuid);
+        //String uuid = menu.getGrandmasterUUID();
+        //if (uuid.length() > 20) { uuid = uuid.substring(0, 19);}
+        //String grandmasterUUID = String.format("UUID : %s...", uuid);
 
         drawString(matrixStack, Minecraft.getInstance().font, energyState, 10, 10, 0xffffff);
         drawString(matrixStack, Minecraft.getInstance().font, grandmaster, 10, 30, 0xffffff);
-        drawString(matrixStack, Minecraft.getInstance().font, grandmasterUUID, 10, 60, 0xffffff);
+        drawString(matrixStack, Minecraft.getInstance().font, grandmasterPoints, 10, 40, 0xffffff);
+        //drawString(matrixStack, Minecraft.getInstance().font, grandmasterUUID, 10, 60, 0xffffff);
 
     }
 }

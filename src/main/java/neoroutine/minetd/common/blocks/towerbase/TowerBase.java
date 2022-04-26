@@ -38,7 +38,7 @@ import java.util.List;
 public class TowerBase extends Block implements EntityBlock
 {
 
-    private static final String MESSAGE_TOWER_BASE        = "Tiny power storage\nsufficient for T1 towers";
+    private static final String MESSAGE_TOWER_BASE        = "Power storage and conversion for towers";
     private static final String SCREEN_MINETD_TOWER_BASE  = "screen.minetd.tower_base";
 
     private static final VoxelShape RENDER_SHAPE = Shapes.box(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);

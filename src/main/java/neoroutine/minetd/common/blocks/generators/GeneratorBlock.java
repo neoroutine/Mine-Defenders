@@ -1,6 +1,5 @@
 package neoroutine.minetd.common.blocks.generators;
 
-import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorBE;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -29,7 +28,7 @@ import java.util.List;
 public class GeneratorBlock extends Block implements EntityBlock
 {
     private static String BLOCK_MESSAGE = "message.generator";
-    private static String SCREEN_MESSAGE  = "screen.minetd.minigenerator";
+    private static String SCREEN_MESSAGE  = "screen.minetd.generator";
     private static final VoxelShape RENDER_SHAPE = Shapes.box(0.1, 0.1, 0.1, 0.9, 0.9, 0.9);
 
     public GeneratorBlock()

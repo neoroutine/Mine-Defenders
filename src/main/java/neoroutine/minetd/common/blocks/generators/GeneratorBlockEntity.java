@@ -83,7 +83,7 @@ public class GeneratorBlockEntity extends BlockEntity
             burningItem.setBurningItem(null);
             ItemStack stack = itemStackHandler.getStackInSlot(0);
 
-            int burnTime = ForgeHooks.getBurnTime(stack, RecipeType.SMELTING);
+            int burnTime = FuelBurnTime.getFuelTime(stack.getItem());
             if (burnTime > 0)
             {
                 itemStackHandler.extractItem(0, 1, false);
@@ -234,14 +234,14 @@ public class GeneratorBlockEntity extends BlockEntity
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack)
             {
-                return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0;
+                return FuelBurnTime.getFuelTime(stack.getItem()) > 0;
             }
 
             @Nonnull
             @Override
             public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate)
             {
-                if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) <= 0)
+                if (FuelBurnTime.getFuelTime(stack.getItem()) <= 0)
                 {
                     return stack;
                 }

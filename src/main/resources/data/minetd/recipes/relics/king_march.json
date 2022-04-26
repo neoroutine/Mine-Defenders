@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "qr ",
+    "bk ",
+    " f "
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "minetd:tower_base_fragment"
+    },
+    "q":
+    {
+      "item": "minetd:queen_move"
+    },
+    "r":
+    {
+      "item": "minetd:rook_move"
+    },
+    "b":
+    {
+      "item": "minetd:bishop_move"
+    },
+    "k":
+    {
+      "item": "minetd:knight_move"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:king_march",
+    "count": 1
+  }
+}

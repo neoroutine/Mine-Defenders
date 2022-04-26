@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ppp",
+    " f ",
+    " f "
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "minetd:tower_base_fragment"
+    },
+    "p":
+    {
+      "item": "minetd:pawn_move"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:sicilian_defense",
+    "count": 1
+  }
+}

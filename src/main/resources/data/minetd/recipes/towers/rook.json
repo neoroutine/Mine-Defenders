@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "rdr",
+    "ktb",
+    "rpr"
+  ],
+  "key":
+  {
+    "r":
+    {
+      "item": "minecraft:redstone"
+    },
+    "p":
+    {
+      "item": "minetd:pawn"
+    },
+    "k":
+    {
+      "item": "minetd:knight"
+    },
+    "b":
+    {
+      "item": "minetd:bishop"
+    },
+    "t":
+    {
+      "item": "minetd:tower_base"
+    },
+    "d":
+    {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:rook",
+    "count": 1
+  }
+}

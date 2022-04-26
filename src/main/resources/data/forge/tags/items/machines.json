@@ -3,9 +3,14 @@
   "values": [
     "minetd:tower_base",
     "minetd:tower_base_fragment",
-    "minetd:minigenerator",
+    "minetd:soft_generator",
+    "minetd:dense_generator",
+    "minetd:neutron_generator",
     "minetd:pawn",
     "minetd:rook",
+    "minetd:bishop",
+    "minetd:knight",
+    "minetd:queen",
     "minetd:black_king",
     "minetd:white_king"
   ]

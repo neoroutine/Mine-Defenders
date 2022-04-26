@@ -84,4 +84,9 @@ public class PawnContainer extends BaseContainer
         return blockEntity.getCapability(CapabilityGrandmaster.GRANDMASTER_CAPABILITY).map(Grandmaster::getGrandMasterUUID).orElse("Unknown");
     }
 
+    public int getGrandmasterEloPoints()
+    {
+        return blockEntity.getCapability(CapabilityGrandmaster.GRANDMASTER_CAPABILITY).map(Grandmaster::getGrandmasterEloPoints).orElse(0);
+    }
+
 }

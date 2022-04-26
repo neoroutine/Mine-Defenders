@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "kgk",
+    "rtr",
+    "kgk"
+  ],
+  "key":
+  {
+    "k":
+    {
+      "item": "minetd:black_king"
+    },
+    "t":
+    {
+      "item": "minetd:tower_base"
+    },
+    "g":
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    "r":
+    {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:white_king",
+    "count": 1
+  }
+}

@@ -5,19 +5,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import neoroutine.minetd.MineTD;
-import neoroutine.minetd.common.blocks.generators.minigenerator.MiniGeneratorScreen;
-import neoroutine.minetd.common.blocks.towerbase.TowerBaseScreen;
 import neoroutine.minetd.common.blocks.towers.TowerBlockEntity;
-import neoroutine.minetd.common.blocks.towers.pawn.PawnScreen;
-import neoroutine.minetd.common.blocks.towers.rook.RookScreen;
-import neoroutine.minetd.common.entities.antiking.AntikingModel;
-import neoroutine.minetd.common.entities.antiking.AntikingRenderer;
 import neoroutine.minetd.common.items.TowerAnalyzer;
-import neoroutine.minetd.common.setup.Registration;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -29,11 +20,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = MineTD.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Rendering

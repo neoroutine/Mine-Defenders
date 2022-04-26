@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "fgf",
+    "rtr",
+    "fgf"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "minetd:tower_base_fragment"
+    },
+    "t":
+    {
+      "item": "minetd:tower_base"
+    },
+    "g":
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    "r":
+    {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:black_king",
+    "count": 1
+  }
+}

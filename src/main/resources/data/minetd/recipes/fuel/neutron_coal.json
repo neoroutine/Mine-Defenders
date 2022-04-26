@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " r ",
+    "rcr",
+    " r "
+  ],
+  "key":
+  {
+    "c":
+    {
+      "item": "minetd:dense_coal"
+    },
+    "r":
+    {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result":
+  {
+    "item": "minetd:neutron_coal",
+    "count": 2
+  }
+}

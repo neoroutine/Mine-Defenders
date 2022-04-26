@@ -1,6 +1,5 @@
 package neoroutine.minetd.common.blocks.towers;
 
-import neoroutine.minetd.common.blocks.generators.GeneratorBlockEntity;
 import neoroutine.minetd.common.capabilities.CapabilityEnergyProperties;
 import neoroutine.minetd.common.capabilities.CapabilityGrandmaster;
 import neoroutine.minetd.common.energy.BaseEnergyProperties;
@@ -8,43 +7,32 @@ import neoroutine.minetd.common.energy.BaseEnergyStorage;
 import neoroutine.minetd.common.grandmaster.EloRatingProvider;
 import neoroutine.minetd.common.grandmaster.Grandmaster;
 import neoroutine.minetd.common.setup.Registration;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 public class TowerBlockEntity extends BlockEntity
 {
@@ -60,6 +48,9 @@ public class TowerBlockEntity extends BlockEntity
 
     public final TowerProperties towerProperties = new TowerProperties(TowerDelay.PAWN, TowerReach.PAWN, TowerDamage.PAWN, TowerConsumption.PAWN);
     private int counter = 0;
+
+    protected Item moveItem = Registration.PAWN_MOVE.get();
+
 
     protected AABB reachBox = null;
     private List<Entity> entities = null;
@@ -95,7 +86,15 @@ public class TowerBlockEntity extends BlockEntity
 
             entities = level.getEntitiesOfClass(Entity.class, reachBox);
             boolean attacked = attackRandomEnemy();
-            if (attacked) energyStorage.consumeEnergy(towerProperties.getConsumption());
+            if (attacked)
+            {
+                energyStorage.consumeEnergy(towerProperties.getConsumption());
+                Random rand = new Random();
+                if (rand.nextInt(0, 21) == 20)
+                {
+                    this.grandmaster.getPlayer().addItem(new ItemStack(moveItem));
+                }
+            }
 
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             setChanged();

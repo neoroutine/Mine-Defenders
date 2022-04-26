@@ -25,6 +25,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,12 +40,15 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class KingBlockEntity extends BlockEntity
 {
     private int spawnCounter = 0;
+    protected int spawnDelay = 60;
     private int healthCounter = 0;
+    private int cleanCounter = 0;
 
     private int startingCount = 0;
     private int startingTimer = 100;
@@ -83,11 +87,9 @@ public class KingBlockEntity extends BlockEntity
 
     public void tickServer()
     {
-        BlockPos pos = getBlockPos();
-        pos = new BlockPos(pos.getX(), pos.getY(), pos.getZ()+30);
+        cleanLane();
 
-        BlockPos finalPos = pos;
-        Runnable task = () ->
+        Runnable attackedTask = () ->
         {
             //Maybe optimize by querying Monster.class and entities.size() > 0 -> attacked=true
             entities = level.getEntitiesOfClass(Entity.class, boundingBox);
@@ -106,7 +108,7 @@ public class KingBlockEntity extends BlockEntity
             }
         };
 
-        delayedPredicateHealth(task, 10);
+        delayedPredicateHealth(attackedTask, 40);
 
 
         if (duplicatedItem.getBurningCounter() > 0)
@@ -139,17 +141,28 @@ public class KingBlockEntity extends BlockEntity
             {
                 if (duplicationStarted)
                 {
-                    stack.setCount(stack.getCount()+1);
-                    itemStackHandler.setStackInSlot(0, stack);
                     duplicationStarted = false;
-
                     this.grandmaster.updatePlayer(this.level);
                     this.grandmaster.getPlayer().getCapability(EloRatingProvider.PLAYER_ELO_POINTS).ifPresent(capability ->
                     {
                         int cost = EloPointsCost.getPointCost(stack.getItem());
-                        capability.subtractPoints(this.grandmaster.getPlayer(), cost);
                         int points = capability.getPoints();
-                        String message = String.format("You duplicated an item. Points -%d (%d)", cost, points);
+                        String message = "";
+
+                        if (capability.getPoints() >= cost)
+                        {
+                            capability.subtractPoints(this.grandmaster.getPlayer(), cost);
+                            stack.setCount(stack.getCount()+1);
+                            itemStackHandler.setStackInSlot(0, stack);
+
+                            message = String.format("You duplicated an item. Points -%d (%d)", cost, points);
+                        }
+                        else
+                        {
+                            message = String.format("You could not duplicate an item. Points remain the same");
+                        }
+
+
                         this.grandmaster.getPlayer().displayClientMessage(new TranslatableComponent(message), true);
                     });
                 }
@@ -169,7 +182,7 @@ public class KingBlockEntity extends BlockEntity
 
         if (startingCount >= startingTimer)
         {
-            spawnAntiking(pos);
+            spawnAntiking();
         }
         else
         {
@@ -201,9 +214,20 @@ public class KingBlockEntity extends BlockEntity
         healthCounter++;
     }
 
+    protected void delayedPredicateClean(Runnable task, int delay)
+    {
+        if (cleanCounter >= delay)
+        {
+            task.run();
+            cleanCounter = 0;
+        }
+
+        cleanCounter++;
+    }
+
     private boolean isAttacked()
     {
-        if (entities.size() == 0) { return false;}
+        if (entities.size() == 0) { return false; }
 
         for (Entity entity: entities)
         {
@@ -224,7 +248,37 @@ public class KingBlockEntity extends BlockEntity
         setChanged();
     }
 
-    private void spawnAntiking(BlockPos pos)
+    protected void spawnAntiking()
+    {
+        BlockPos pos = getBlockPos();
+        Direction facing = getBlockState().getValue(HorizontalDirectionalBlock.FACING);
+
+        Random rand = new Random();
+        int widthoffset = rand.nextInt(-2, 3);
+        int lengthOffset = 30;
+        switch (facing)
+        {
+            case NORTH:
+                pos = new BlockPos(pos.getX()+widthoffset, pos.getY(), pos.getZ()+lengthOffset);
+                break;
+
+            case SOUTH:
+                pos = new BlockPos(pos.getX()+widthoffset, pos.getY(), pos.getZ()-lengthOffset);
+                break;
+
+            case EAST:
+                pos = new BlockPos(pos.getX()-lengthOffset, pos.getY(), pos.getZ()+widthoffset);
+                break;
+
+            case WEST:
+                pos = new BlockPos(pos.getX()+lengthOffset, pos.getY(), pos.getZ()+widthoffset);
+                break;
+        }
+
+        spawnAntiking(pos);
+    }
+
+    protected void spawnAntiking(BlockPos pos)
     {
         EntityType<AntikingEntity> mob = Registration.ANTIKING.get();
 
@@ -233,7 +287,20 @@ public class KingBlockEntity extends BlockEntity
             mob.spawn((ServerLevel) level, null, ((ServerLevel) level).getRandomPlayer(), pos, MobSpawnType.EVENT, false, false);
         };
 
-        delayedPredicateSpawn(task,60);
+        delayedPredicateSpawn(task,spawnDelay);
+    }
+
+    protected void cleanLane()
+    {
+        Direction facing = getBlockState().getValue(HorizontalDirectionalBlock.FACING);
+
+        Runnable task = () ->
+        {
+            KingStructure.cleanHallway(this, 9, 50, facing);
+            KingStructure.cleanJail(this, facing);
+        };
+
+        delayedPredicateClean(task, 20);
     }
 
     @Override
