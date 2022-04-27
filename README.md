@@ -81,6 +81,9 @@ This mod features two kings to defend:
 
 Once placed, these blocks will build an arena where you will be able to place your towers under one rule : You cannot block the path of the enemies
 
+While the king is in the world, you can use it to duplicate select few items given enough earned elo points.
+
+<img src="images/king_gui.png" width="400">
 <img src="images/black_king.png" width="400">
 <img src="images/white_king.png" width="400">
 
